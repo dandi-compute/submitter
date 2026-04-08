@@ -1,25 +1,18 @@
-# DANDI Compute Job Submitter
+# DANDI Compute: AIND Job Submitter
 
-Submit jobs to DANDI Compute.
+Automatic CRON-based submission of jobs from the [DANDI Compute: AIND Queue](https://github.com/dandi-compute/queue).
 
+
+
+## How to setup the runner
+
+1. Go to Settings -> Actions -> Runners -> New self-hosted runner -> Linux
+2. Log into https://engaging-ood.mit.edu/ -> Open a new cluster shell
+3. `cd /orcd/data/dandi/001/dandi-compute/submitter`
+4. Follow copy & paste instructions from Settings
+5. Add the labels `mit`, `engaging`, and `compute`
 
 
 ## How to submit a job request (manual)
 
-In order to submit a job for processing:
-
-1. Fork this repository.
-2. Write the following YAML structure in a file named `dandi_compute_job.yaml`:
-
-```yaml
-dandiset: "[six-digit Dandiset ID]"
-path: "sub-[subject ID]/ses-[session ID]/[NWB filename].nwb"
-run_id: "[unique run ID for this job]"
-[optional] config: [upload a new custom config file with the pull request, or specify the known ID for a re-used one]
-```
-
-3. Add this file under the `incoming` subdirectory.
-4. Raise a pull request against the main repository.
-5. Once accepted, the runner on the MIT cluster will pick up the job within ~5 minutes and begin processing.
-6. You can see all job IDs and their status in real time at the [Monitor Dashboard](https://github.com/dandi-compute/monitor).
-7. If the job was successful, you should find the results under the corresponding subdirectory of Dandiset `001675` under the specified blob and run IDs. If unsuccessful, there should be log files with details stored under the same location. Otherwise, please raise an issue for assistance.
+Ask Cody (@CodyCBakerPhD) and he has a private manual dispatcher.
