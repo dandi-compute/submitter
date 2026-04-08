@@ -2,16 +2,8 @@ name: Run AIND Ephys
 
 on:
   workflow_dispatch:
-    inputs:
-      content_id:
-        description: 'DANDI content ID (blob or zarr)'
-        required: true
-        type: string
-      extra_args:
-        description: 'Additional args to pass to dandicompute'
-        required: false
-        default: ''
-        type: string
+  schedule:
+    - cron: '0 * * * *'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
