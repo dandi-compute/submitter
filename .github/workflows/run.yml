@@ -1,0 +1,66 @@
+name: Run AIND Ephys
+
+on:
+  workflow_dispatch:
+    inputs:
+      content_id:
+        description: 'DANDI content ID (blob or zarr)'
+        required: true
+        type: string
+      extra_args:
+        description: 'Additional args to pass to dandicompute'
+        required: false
+        default: ''
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  DANDI_API_KEY: ${{ secrets.DANDI_API_KEY }}
+  DANDI_DEVEL: 1
+
+jobs:
+  CheckEngaging:
+    name: Pre-run Check
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cancel if offline
+        uses: ./.github/actions/check-runner
+        with:
+          org: CodyCBakerPhD/self-hosted-crons
+          labels: mit,engaging,compute
+          token: ${{ secrets._GITHUB_API_KEY }}
+
+  RunAINDEphys:
+    needs: CheckEngaging
+    name: Run AIND Ephys
+    runs-on: [self-hosted, mit, engaging, compute]
+
+    steps:
+      - name: Run queue processing script
+        working-directory: /orcd/data/dandi/001/dandi-compute/queue
+        run: python ./code/process_queue.py
+
+  NotifyOnFailure:
+    if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
+    needs: [CheckEngaging, RunAINDEphys]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send email notification on failure
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "DANDI Compute: AIND Queue submission failed (MIT Engaging dispatch)"
+          to: cody.c.baker.phd@gmail.com  # Add more with comma separation (no spaces)
+          from: Typhon CRON
+          body: |
+            The scheduled run of AIND Ephys pipeline encountered an issue!
+            Please check status at: https://github.com/dandi-compute/submitter/actions/workflows/run.yml
