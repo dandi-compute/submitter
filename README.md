@@ -28,6 +28,14 @@ The repository is kept public to allow anyone to see the runtime logs of the sub
 6. Give this runner the name `compute`
 7. Add the labels `mit`, `engaging`, and `compute`
 8. Use the default work directory
+9. Setup a `crontab` with the following:
+
+```
+# For whatever reason, this particular job is sensitive to the usage of `/bin/bash -l` in order to 'behave properly'. Otherwise the SLURM job does run, the self-hosted runner is active, but the conda init does not trigger and so no environment is
+ found.
+*/1 * * * * /bin/bash -l -c 'flock -n /orcd/data/dandi/001/dandi-compute/submitter/submitter.lock -c "sbatch --output /dev/null --error=/dev/null /orcd/data/dandi/001/dandi-compute/submitter/submit.sh" || echo "$(date): lock held, skipping submit"' > /d
+ev/null 2>&1
+```
 
 
 
