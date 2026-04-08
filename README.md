@@ -10,7 +10,10 @@ Automatic CRON-based submission of jobs from the [DANDI Compute: AIND Queue](htt
 2. Log into https://engaging-ood.mit.edu/ -> Open a new cluster shell
 3. `cd /orcd/data/dandi/001/dandi-compute/submitter`
 4. Follow copy & paste instructions from Settings
-5. Add the labels `mit`, `engaging`, and `compute`
+5. Use the default runner group
+6. Give this runner the name `compute`
+7. Add the labels `mit`, `engaging`, and `compute`
+8. Use the default work directory
 
 
 ## How to submit a job request (manual)
