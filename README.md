@@ -4,6 +4,20 @@ Automatic CRON-based submission of jobs from the [DANDI Compute: AIND Queue](htt
 
 
 
+## Why doesn't this repository allow Pull Requests?
+
+This repository uses a self-hosted runner instead of GitHub-hosted Actions runners.
+
+This means that external users could otherwise fork and submit a pull request that contains code modifications that could expose secrets and other hostile actions.
+
+While this could be mitigated through careful permissioning and approval of run triggers before accepting contributions, it is much safer overall to simply disable them.
+
+If you have any questions or suggestions, please raise an Issue instead.
+
+The repository is kept public to allow anyone to see the runtime logs of the submission process, as well as the success/failure/timestamp of the triggers.
+
+
+
 ## How to setup the runner
 
 1. Go to Settings -> Actions -> Runners -> New self-hosted runner -> Linux
@@ -14,6 +28,7 @@ Automatic CRON-based submission of jobs from the [DANDI Compute: AIND Queue](htt
 6. Give this runner the name `compute`
 7. Add the labels `mit`, `engaging`, and `compute`
 8. Use the default work directory
+
 
 
 ## How to submit a job request (manual)
