@@ -33,7 +33,7 @@ jobs:
 
     steps:
       - name: Update whole Dandiset copy
-        working-directory: /orcd/data/dandi/001/dandi-compute/dandi/001697
+        working-directory: /orcd/data/dandi/001/dandi-compute/dandi
         run: dandi download DANDI:001697 --sync --existing skip
 
       - name: Sync with GitHub and push
