@@ -8,7 +8,7 @@ Automatic CRON-based submission of jobs from the [DANDI Compute: AIND Queue](htt
 
 This repository uses a self-hosted runner instead of GitHub-hosted Actions runners.
 
-This means that external users could otherwise fork and submit a pull request that contains code modifications that could expose secrets and other hostile actions.
+This means that external users could fork and submit a pull request that contains code modifications that might expose secrets or other hostile actions.
 
 While this could be mitigated through careful permissioning and approval of run triggers before accepting contributions, it is much safer overall to simply disable them.
 
