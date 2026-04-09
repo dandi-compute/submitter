@@ -17,7 +17,6 @@ jobs:
   CheckEngaging:
     name: Pre-run Check
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
     steps:
       - uses: actions/checkout@v4
 
