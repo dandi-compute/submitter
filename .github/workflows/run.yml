@@ -34,8 +34,8 @@ jobs:
 
     steps:
       - name: Run queue processing script
-        working-directory: /orcd/data/dandi/001/dandi-compute/queue
         run: |
+          cd /orcd/data/dandi/001/dandi-compute/queue
           python ./code/process_queue.py
 
           git config --global user.name "github-actions[bot]"
