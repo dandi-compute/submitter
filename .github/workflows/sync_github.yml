@@ -1,4 +1,4 @@
-name: Run AIND Ephys
+name: Sync GitHub
 
 on:
   workflow_dispatch:
@@ -36,11 +36,14 @@ jobs:
         working-directory: /orcd/data/dandi/001/dandi-compute/dandi/001697
         run: dandi download --sync DANDI:001697
 
-      - name: 
+      - name: Sync with GitHub and push
         working-directory: /orcd/data/dandi/001/dandi-compute
         run: |
           rsync -a --delete dandi/001697/ github/001697/
           find github/001697/ -name '*.nwb' -type f -delete  # TODO: until proper DataLad with annexed NWBs to special remote
+
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
           git -C github/001697 add .
           git -C github/001697 commit --message "update" || true  # || true in case of no changes
