@@ -36,7 +36,7 @@ jobs:
       - name: Run queue processing script
         working-directory: /orcd/data/dandi/001/dandi-compute/queue
         run: |
-          python code/process_queue.py
+          dandicompute queue process
 
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
