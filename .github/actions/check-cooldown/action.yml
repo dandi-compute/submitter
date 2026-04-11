@@ -1,0 +1,78 @@
+name: Check notification cooldown
+description: >
+  Checks if a failure notification was already sent in the last 24 hours
+  for a given workflow, implementing a cooldown between repeat notifications.
+
+inputs:
+  workflow_file:
+    description: "The workflow filename (e.g., process_queue.yml)."
+    required: true
+  token:
+    description: "GitHub token used to query workflow run history."
+    required: true
+  job_name:
+    description: "The job ID (or display name) of the notification job to check."
+    required: false
+    default: "NotifyOnFailure"
+  step_name:
+    description: "The name of the email-sending step within the notification job."
+    required: false
+    default: "Send email notification on failure"
+
+outputs:
+  should_notify:
+    description: "'true' if a notification should be sent, 'false' if still within the 24-hour cooldown."
+    value: ${{ steps.check.outputs.should_notify }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Check 24-hour cooldown
+      id: check
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token }}
+      run: |
+        REPO="$GITHUB_REPOSITORY"
+        CURRENT_RUN_ID="$GITHUB_RUN_ID"
+        WORKFLOW_FILE="${{ inputs.workflow_file }}"
+        JOB_NAME="${{ inputs.job_name }}"
+        STEP_NAME="${{ inputs.step_name }}"
+
+        # Calculate cutoff timestamp (24 hours ago).
+        # Note: date -d is GNU-specific; this action is intended for Linux (ubuntu-latest) runners.
+        SINCE=$(date -u -d '24 hours ago' '+%Y-%m-%dT%H:%M:%SZ')
+
+        # Fetch recent workflow runs; 50 is enough to cover 24+ hours of hourly crons
+        MAX_RUNS=50
+        if ! RUNS_JSON=$(gh api "repos/$REPO/actions/workflows/$WORKFLOW_FILE/runs?per_page=$MAX_RUNS"); then
+          echo "Warning: Failed to query workflow run history via GitHub API. Defaulting to send notification to avoid missed alerts."
+          echo "should_notify=true" >> "$GITHUB_OUTPUT"
+          exit 0
+        fi
+
+        # Extract run IDs from the last 24 hours, excluding the current run
+        RUN_IDS=$(echo "$RUNS_JSON" | jq -r \
+          --arg since "$SINCE" \
+          --argjson current_id "$CURRENT_RUN_ID" \
+          '.workflow_runs[] | select(.id != $current_id) | select(.created_at > $since) | .id')
+
+        SHOULD_NOTIFY=true
+
+        for RUN_ID in $RUN_IDS; do
+          # Check if the email step specifically succeeded in this run.
+          # The job itself succeeds even when the email step is skipped due to cooldown,
+          # so we must check the step conclusion rather than the job conclusion to avoid
+          # permanently suppressing notifications after the first cooldown cycle.
+          if STEP_CONCLUSION=$(gh api "repos/$REPO/actions/runs/$RUN_ID/jobs" | \
+              jq -r --arg job "$JOB_NAME" --arg step "$STEP_NAME" \
+              '.jobs[] | select(.name == $job) | .steps[] | select(.name == $step) | .conclusion'); then
+            if [ "$STEP_CONCLUSION" = "success" ]; then
+              SHOULD_NOTIFY=false
+              echo "Cooldown active: notification was already sent in workflow run $RUN_ID."
+              break
+            fi
+          fi
+        done
+
+        echo "should_notify=$SHOULD_NOTIFY" >> "$GITHUB_OUTPUT"

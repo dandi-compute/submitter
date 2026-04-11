@@ -51,7 +51,17 @@ jobs:
     needs: [CheckEngaging, RunAINDEphys]
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
+      - name: Check 24-hour cooldown
+        id: cooldown
+        uses: ./.github/actions/check-cooldown
+        with:
+          workflow_file: process_queue.yml
+          token: ${{ github.token }}
+
       - name: Send email notification on failure
+        if: ${{ steps.cooldown.outputs.should_notify == 'true' }}
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
