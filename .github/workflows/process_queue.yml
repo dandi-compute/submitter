@@ -35,7 +35,9 @@ jobs:
       - name: Run queue processing script
         working-directory: /orcd/data/dandi/001/dandi-compute/queue
         run: |
+          git fetch origin
           git reset --hard origin/main
+          git clean -fd
         
           dandicompute queue process
 
