@@ -1,0 +1,54 @@
+#!/bin/bash
+#
+# guarded-submit - Run a command only if pending Slurm jobs are below a threshold.
+#
+# Usage: guarded-submit [-n MAX_PD] [-u USER] [-s STATE] [-q] -- CMD [ARGS...]
+#
+# Options:
+#   -n MAX_PD   Max pending jobs allowed before skipping (default: 10)
+#   -u USER     User to check (default: current user via --me)
+#   -s STATE    Slurm state(s) to count, comma-separated (default: PD)
+#   -q          Quiet: suppress the "skipping" message
+#   -h          Show help
+#
+# Exit codes:
+#   0  command executed, or threshold reached (skipped cleanly)
+#   2  usage error
+#   *  whatever the wrapped command returned
+#
+set -euo pipefail
+
+MAX_PD=10
+USER_FILTER="--me"
+STATE="PD"
+QUIET=0
+
+usage() {
+    sed -n '2,20p' "$0" | sed 's/^# \{0,1\}//'
+    exit "${1:-2}"
+}
+
+while getopts ":n:u:s:qh" opt; do
+    case "$opt" in
+        n) MAX_PD=$OPTARG ;;
+        u) USER_FILTER="-u $OPTARG" ;;
+        s) STATE=$OPTARG ;;
+        q) QUIET=1 ;;
+        h) usage 0 ;;
+        \?) echo "Unknown option: -$OPTARG" >&2; usage ;;
+        :)  echo "Option -$OPTARG requires an argument" >&2; usage ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+[ "$#" -ge 1 ] || { echo "Error: no command specified" >&2; usage; }
+
+# shellcheck disable=SC2086
+count=$(squeue $USER_FILTER -h -t "$STATE" -o %i | wc -l)
+
+if [ "$count" -ge "$MAX_PD" ]; then
+    [ "$QUIET" -eq 1 ] || echo "$(date): $count jobs in state $STATE (>= $MAX_PD), skipping: $*"
+    exit 0
+fi
+
+exec "$@"
