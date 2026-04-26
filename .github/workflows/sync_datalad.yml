@@ -1,4 +1,4 @@
-name: Sync GitHub
+name: Sync DataLad
 
 on:
   workflow_dispatch:
