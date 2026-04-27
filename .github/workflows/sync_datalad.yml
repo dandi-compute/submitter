@@ -36,7 +36,18 @@ jobs:
       - name: Update DataLad dataset
         working-directory: /orcd/data/dandi/001/dandi-compute
         run: |
-          python3 -c "import keyring; keyring.set_password('datalad-api.github.com', 'token', '${GITHUB_TOKEN}')"
+          git config --global datalad.credentials.force-plaintext true
+          mkdir -p ~/.config/datalad/providers/
+          cat > ~/.config/datalad/providers/github.cfg << EOF
+          [provider:github]
+          url_re = https://api\.github\.com.*
+          authentication_type = bearer_token
+          credential = api.github.com
+          
+          [credential:api.github.com]
+          type = token
+          token = ${GITHUB_TOKEN}
+          EOF
 
           backups2datalad --backup-root ./datalad/ --config ./datalad/config.yaml update-from-backup 001697
 
