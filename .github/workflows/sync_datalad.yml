@@ -38,7 +38,7 @@ jobs:
         run: |
           git config --global url."https://x-access-token:${GITHUB_TOKEN}@github.com/".insteadOf "git@github.com:"
           git config --global url."https://x-access-token:${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
-          
+
           backups2datalad --backup-root ./datalad/ --config ./datalad/config.yaml update-from-backup 001697
 
       - name: Push to GitHub

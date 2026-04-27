@@ -2,7 +2,7 @@
 #SBATCH --job-name=DANDI-Compute-Submitter
 #SBATCH --mem=1GB
 #SBATCH --cpus-per-task 1
-#SBATCH --partition=mit_preemptable 
+#SBATCH --partition=mit_preemptable
 #SBATCH --time=12:00:00
 
 source /etc/profile.d/modules.sh
