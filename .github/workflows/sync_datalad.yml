@@ -33,7 +33,7 @@ jobs:
     runs-on: [self-hosted, mit, engaging, compute]
 
     steps:
-      - name: Configure `git`
+      - name: Configure Git
         run: |
           git config --global datalad.credential.api.github.com.token "${GITHUB_TOKEN}"
           git config --global user.name "github-actions[bot]"
