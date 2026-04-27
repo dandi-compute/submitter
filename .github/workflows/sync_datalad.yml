@@ -46,11 +46,11 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          git -C ./datalad/dandisets/001697 remote set-url github https://x-access-token:${GITHUB_TOKEN}@github.com/dandi-compute/001697.git
-          git -C ./datalad/dandisets/001697 remote set-url --push github https://x-access-token:${GITHUB_TOKEN}@github.com/dandi-compute/001697.git
+          #git -C ./datalad/dandisets/001697 remote set-url github https://x-access-token:${GITHUB_TOKEN}@github.com/dandi-compute/001697.git
+          #git -C ./datalad/dandisets/001697 remote set-url --push github https://x-access-token:${GITHUB_TOKEN}@github.com/dandi-compute/001697.git
 
           cd ./datalad/dandisets/001697
-          #datalad push --to github
+          datalad push --to github
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
