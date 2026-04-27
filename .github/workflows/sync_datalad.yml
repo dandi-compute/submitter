@@ -33,16 +33,21 @@ jobs:
     runs-on: [self-hosted, mit, engaging, compute]
 
     steps:
+      - name: Update DataLad dataset
+        working-directory: /orcd/data/dandi/001/dandi-compute
+        run: backups2datalad --backup-root ./datalad/ --config ./datalad/config.yaml update-from-backup 001697
+
       - name: Sync with DataLad on GitHub and push
         working-directory: /orcd/data/dandi/001/dandi-compute
         run: |
-          backups2datalad --backup-root ./datalad/ --config ./datalad/config.yaml update-from-backup 001697
-
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          cd datalad/dandisets/001697
-          datalad push
+          git -C ./datalad/dandisets/001697 remote set-url github https://x-access-token:${GITHUB_TOKEN}@github.com/dandi-compute/001697.git
+          git -C ./datalad/dandisets/001697 remote set-url --push github https://x-access-token:${GITHUB_TOKEN}@github.com/dandi-compute/001697.git
+
+          cd ./datalad/dandisets/001697
+          datalad push --to github
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
