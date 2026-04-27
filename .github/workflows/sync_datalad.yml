@@ -3,7 +3,7 @@ name: Sync DataLad
 on:
   workflow_dispatch:
   schedule:
-    - cron: '55 * * * *'
+    - cron: '55 0 * * *'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
