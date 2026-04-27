@@ -12,7 +12,6 @@ concurrency:
 env:
   DANDI_API_KEY: ${{ secrets.DANDI_API_KEY }}
   GITHUB_TOKEN: ${{ secrets._GITHUB_API_KEY }}
-  DATALAD_CREDENTIAL_API__GITHUB__COM_TOKEN: ${{ secrets._GITHUB_API_KEY }}
 
 jobs:
   CheckEngaging:
@@ -36,7 +35,10 @@ jobs:
     steps:
       - name: Update DataLad dataset
         working-directory: /orcd/data/dandi/001/dandi-compute
-        run: backups2datalad --backup-root ./datalad/ --config ./datalad/config.yaml update-from-backup 001697
+        run: |
+          git config --global datalad.credential.api.github.com.token "${GITHUB_TOKEN}"
+          
+          backups2datalad --backup-root ./datalad/ --config ./datalad/config.yaml update-from-backup 001697
 
       - name: Push to GitHub
         working-directory: /orcd/data/dandi/001/dandi-compute
