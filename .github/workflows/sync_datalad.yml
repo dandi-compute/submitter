@@ -36,7 +36,7 @@ jobs:
       - name: Update DataLad dataset
         working-directory: /orcd/data/dandi/001/dandi-compute
         run: |
-          git config --global hub.oauthtoken "${GITHUB_TOKEN}"
+          datalad credentials set github -- token="${GITHUB_TOKEN}"
 
           backups2datalad --backup-root ./datalad/ --config ./datalad/config.yaml update-from-backup 001697
 
