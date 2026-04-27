@@ -38,12 +38,12 @@ jobs:
           git -C queue fetch origin
           git -C queue reset --hard origin/main
           git -C queue clean -fd
-        
+
           dandicompute queue process --directory ./queue --dandiset-directory ./github/001697
 
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
+
           git -C queue add .
           git -C queue commit --message "update" || true  # || true in case of no changes
           git -C queue push

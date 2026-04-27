@@ -28,7 +28,7 @@ IFS=',' read -ra label_array <<< "$labels"
 
 # Build jq filter to check if runner has all required labels
 available=$(echo "$response" | jq -r --argjson required_labels "$(printf '%s\n' "${label_array[@]}" | jq -R . | jq -s .)" '
-  .runners[] | select(.status == "online") | 
+  .runners[] | select(.status == "online") |
   select(
     ([.labels[].name] as $runner_labels |
      $required_labels | all(. as $req | $runner_labels | contains([$req])))

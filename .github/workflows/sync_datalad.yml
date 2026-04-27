@@ -3,7 +3,7 @@ name: Sync DataLad
 on:
   workflow_dispatch:
   schedule:
-    - cron: '55 0 * * *'
+    - cron: '15 */0.5 * * *'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -33,21 +33,19 @@ jobs:
     runs-on: [self-hosted, mit, engaging, compute]
 
     steps:
+      - name: Configure Git
+        run: |
+          git config --global datalad.credential.api.github.com.token "${GITHUB_TOKEN}"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Update DataLad dataset
         working-directory: /orcd/data/dandi/001/dandi-compute
         run: backups2datalad --backup-root ./datalad/ --config ./datalad/config.yaml update-from-backup 001697
 
-      - name: Sync with DataLad on GitHub and push
+      - name: Push to GitHub
         working-directory: /orcd/data/dandi/001/dandi-compute
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-          git -C ./datalad/dandisets/001697 remote set-url github https://x-access-token:${GITHUB_TOKEN}@github.com/dandi-compute/001697.git
-          git -C ./datalad/dandisets/001697 remote set-url --push github https://x-access-token:${GITHUB_TOKEN}@github.com/dandi-compute/001697.git
-
-          cd ./datalad/dandisets/001697
-          datalad push --to github
+        run: datalad -C ./datalad/dandisets/001697 push --to github
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped

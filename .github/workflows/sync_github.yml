@@ -41,13 +41,13 @@ jobs:
         run: |
           git -C github/001697 fetch --all
           git -C github/001697 reset --hard origin/main
-        
+
           rsync -a --delete --exclude='.git' --exclude='.datalad' --exclude='README.md' dandi/001697/ github/001697/
           find github/001697/ -name '*.nwb' -type f -delete  # TODO: until proper DataLad with annexed NWBs to special remote
 
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
+
           git -C github/001697 add .
           git -C github/001697 commit --message "update" || true  # || true in case of no changes
           git -C github/001697 push
