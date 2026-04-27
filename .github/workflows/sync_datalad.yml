@@ -43,7 +43,7 @@ jobs:
           url_re = https://api\.github\.com.*
           authentication_type = bearer_token
           credential = api.github.com
-          
+
           [credential:api.github.com]
           type = token
           token = ${GITHUB_TOKEN}
