@@ -45,7 +45,7 @@ jobs:
 
       - name: Push to GitHub
         working-directory: /orcd/data/dandi/001/dandi-compute
-        run: datalad -d ./datalad/dandisets/001697 push --to github
+        run: datalad -C ./datalad/dandisets/001697 push --to github
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
