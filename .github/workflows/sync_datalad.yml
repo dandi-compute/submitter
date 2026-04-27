@@ -37,7 +37,7 @@ jobs:
         working-directory: /orcd/data/dandi/001/dandi-compute
         run: |
           git config --global datalad.credential.api.github.com.token "${GITHUB_TOKEN}"
-          
+
           backups2datalad --backup-root ./datalad/ --config ./datalad/config.yaml update-from-backup 001697
 
       - name: Push to GitHub
