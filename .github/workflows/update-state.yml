@@ -1,0 +1,75 @@
+name: Update queue state
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 * * * *'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  CheckEngaging:
+    name: Pre-run Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cancel if offline
+        uses: ./.github/actions/check-runner
+        with:
+          org: CodyCBakerPhD/self-hosted-crons
+          labels: mit,engaging,compute
+          token: ${{ secrets._GITHUB_API_KEY }}
+
+  RunAINDEphys:
+    needs: CheckEngaging
+    name: Run AIND Ephys
+    runs-on: [self-hosted, mit, engaging, compute]
+
+    steps:
+      - name: Run queue processing script
+        working-directory: /orcd/data/dandi/001/dandi-compute
+        run: |
+          git -C queue fetch origin
+          git -C queue reset --hard origin/main
+          git -C queue clean -fd
+
+          dandicompute dandiset scan --directory ./dandi/001697/ --output ./queue/state.jsonl
+
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          git -C queue add .
+          git -C queue commit --message "update" || true  # || true in case of no changes
+          git -C queue push
+
+  NotifyOnFailure:
+    if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
+    needs: [CheckEngaging, RunAINDEphys]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check 24-hour cooldown
+        id: cooldown
+        uses: ./.github/actions/check-cooldown
+        with:
+          workflow_file: process_queue.yml
+          token: ${{ github.token }}
+
+      - name: Send email notification on failure
+        if: ${{ steps.cooldown.outputs.should_notify == 'true' }}
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "DANDI Compute: AIND Queue processing failed (MIT Engaging dispatch)"
+          to: cody.c.baker.phd@gmail.com  # Add more with comma separation (no spaces)
+          from: Typhon CRON
+          body: |
+            The scheduled run of AIND Ephys pipeline encountered an issue!
+            Please check status at: https://github.com/dandi-compute/submitter/actions/workflows/process_queue.yml
