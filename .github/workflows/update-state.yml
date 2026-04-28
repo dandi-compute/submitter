@@ -3,7 +3,7 @@ name: Update queue state
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 * * * *'
+    - cron: '30 * * * *'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
