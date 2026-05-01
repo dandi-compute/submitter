@@ -39,7 +39,7 @@ jobs:
           git -C queue reset --hard origin/main
           git -C queue clean -fd
 
-          dandicompute queue process --directory ./queue --dandiset-directory ./github/001697
+          dandicompute queue process --queue-directory ./queue --dandiset-directory ./dandi/001697
 
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
