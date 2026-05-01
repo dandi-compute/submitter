@@ -32,11 +32,13 @@ jobs:
       - name: Run queue processing script
         working-directory: /orcd/data/dandi/001/dandi-compute
         run: |
-          git -C queue fetch origin
-          git -C queue reset --hard origin/main
-          git -C queue clean -fd
+          git -C ./queue fetch origin
+          git -C ./queue reset --hard origin/main
+          git -C ./queue clean -fd
 
-          dandicompute dandiset scan --directory ./dandi/001697/ --output ./queue/state.jsonl
+          git -C ./datalad/dandisets/001697 pull
+
+          dandicompute dandiset scan --directory ./datalad/dandisets/001697/ --output ./queue/state.jsonl
 
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
