@@ -1,22 +1,23 @@
 #!/bin/bash
 
-if [ -z "$1" ] || [ -z "$2" ]; then
-  echo "Usage: $0 <org_or_repo> <labels_comma_separated>"
+if [ -z "$1" ]; then
+  echo "Usage: $0 <labels_comma_separated>"
   exit 1
 fi
 
-target="$1"
-labels="$2"
+target="${GITHUB_REPOSITORY:-}"
+labels="$1"
+
+if [ -z "$target" ]; then
+  echo "Error: GITHUB_REPOSITORY is not set." >&2
+  exit 1
+fi
 
 if ! command -v gh &> /dev/null; then
   echo "Error: GitHub CLI (gh) is not installed." >&2
   exit 1
 fi
-if [[ "$target" == *"/"* ]]; then
-  endpoint="repos/$target/actions/runners"
-else
-  endpoint="orgs/$target/actions/runners"
-fi
+endpoint="repos/$target/actions/runners"
 response=$(gh api "$endpoint" 2>/dev/null)
 if [ $? -ne 0 ]; then
   echo "Error: API call failed at $endpoint" >&2

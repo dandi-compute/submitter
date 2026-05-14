@@ -23,7 +23,6 @@ jobs:
       - name: Cancel if offline
         uses: ./.github/actions/check-runner
         with:
-          org: CodyCBakerPhD/self-hosted-crons
           labels: mit,engaging,compute
           token: ${{ secrets._GITHUB_API_KEY }}
 
