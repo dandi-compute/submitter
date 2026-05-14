@@ -9,6 +9,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
 
+env:
+  KACHERY_API_KEY: ${{ secrets.KACHERY_API_KEY }}
+
 jobs:
   CheckEngaging:
     name: Pre-run Check
