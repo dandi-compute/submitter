@@ -4,7 +4,7 @@ Automatic CRON-based submission of jobs from the [DANDI Compute: AIND Queue](htt
 
 
 
-## Why doesn't this repository allow Pull Requests?
+## Why doesn't this repository allow Pull Requests from external forks?
 
 This repository uses a self-hosted runner instead of GitHub-hosted Actions runners.
 
