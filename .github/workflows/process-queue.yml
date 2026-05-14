@@ -19,7 +19,7 @@ jobs:
     name: Pre-run Check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Cancel if offline
         uses: ./.github/actions/check-runner
@@ -57,7 +57,7 @@ jobs:
     needs: [CheckEngaging, RunAINDEphys]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Check 24-hour cooldown
         id: cooldown
