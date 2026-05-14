@@ -1,0 +1,67 @@
+name: Clean work directory
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 1 * *'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  CheckEngaging:
+    name: Pre-run Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cancel if offline
+        uses: ./.github/actions/check-runner
+        with:
+          org: CodyCBakerPhD/self-hosted-crons
+          labels: mit,engaging,compute
+          token: ${{ secrets._GITHUB_API_KEY }}
+
+  CleanWorkDirectory:
+    needs: CheckEngaging
+    name: Clean work directory
+    runs-on: [self-hosted, mit, engaging, compute]
+
+    steps:
+      - name: Clean cached work directory
+        working-directory: /orcd/data/dandi/001/dandi-compute
+        run: dandicompute clean --directory ./work/
+
+  NotifyOnFailure:
+    if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
+    needs: [CheckEngaging, CleanWorkDirectory]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check 24-hour cooldown
+        id: cooldown
+        uses: ./.github/actions/check-cooldown
+        with:
+          workflow_file: clean-workdir.yml
+          token: ${{ github.token }}
+
+      - name: Send email notification on failure
+        if: ${{ steps.cooldown.outputs.should_notify == 'true' }}
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "DANDI Compute: monthly work directory cleanup failed"
+          to: cody.c.baker.phd@gmail.com  # Add more with comma separation (no spaces)
+          from: Typhon CRON
+          body: |
+            The scheduled monthly cleanup of ./work/ encountered an issue.
+            Please check status at: https://github.com/dandi-compute/submitter/actions/workflows/clean-workdir.yml
