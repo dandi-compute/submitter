@@ -23,13 +23,13 @@ jobs:
           labels: mit,engaging,compute
           token: ${{ secrets._GITHUB_API_KEY }}
 
-  RunAINDEphys:
+  UpdateQueueState:
     needs: CheckEngaging
     name: Run AIND Ephys
     runs-on: [self-hosted, mit, engaging, compute]
 
     steps:
-      - name: Run queue processing script
+      - name: Update queue state
         working-directory: /orcd/data/dandi/001/dandi-compute
         run: |
           git -C ./queue fetch origin
