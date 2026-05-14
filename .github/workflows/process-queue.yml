@@ -11,6 +11,7 @@ concurrency:
 
 env:
   DANDI_API_KEY: ${{ secrets.DANDI_API_KEY }}
+  KACHERY_API_KEY: ${{ secrets.KACHERY_API_KEY }}
 
 jobs:
   CheckEngaging:
