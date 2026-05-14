@@ -1,0 +1,34 @@
+name: Clean work directory
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 1 * *'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  CheckEngaging:
+    name: Pre-run Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cancel if offline
+        uses: ./.github/actions/check-runner
+        with:
+          org: CodyCBakerPhD/self-hosted-crons
+          labels: mit,engaging,compute
+          token: ${{ secrets._GITHUB_API_KEY }}
+
+  CleanWorkDirectory:
+    needs: CheckEngaging
+    name: Clean work directory
+    runs-on: [self-hosted, mit, engaging, compute]
+
+    steps:
+      - name: Clean cached work directory
+        working-directory: /orcd/data/dandi/001/dandi-compute
+        run: dandicompute clean --directory ./work/
