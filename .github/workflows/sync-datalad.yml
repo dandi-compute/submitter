@@ -30,6 +30,9 @@ jobs:
     needs: CheckEngaging
     name: Run AIND Ephys
     runs-on: [self-hosted, mit, engaging, compute]
+    defaults:
+      run:
+        working-directory: /orcd/data/dandi/001/dandi-compute
 
     steps:
       - name: Configure Git
@@ -39,11 +42,9 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Update DataLad dataset
-        working-directory: /orcd/data/dandi/001/dandi-compute
         run: backups2datalad --backup-root ./datalad/ --config ./datalad/config.yaml update-from-backup 001697
 
       - name: Push to GitHub
-        working-directory: /orcd/data/dandi/001/dandi-compute
         run: datalad -C ./datalad/dandisets/001697 push --to github
 
   NotifyOnFailure:

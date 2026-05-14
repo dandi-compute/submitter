@@ -28,10 +28,12 @@ jobs:
     if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     name: Run AIND Ephys
     runs-on: [self-hosted, mit, engaging, compute]
+    defaults:
+      run:
+        working-directory: /orcd/data/dandi/001/dandi-compute
 
     steps:
       - name: Update queue state
-        working-directory: /orcd/data/dandi/001/dandi-compute
         run: |
           git -C ./queue fetch origin
           git -C ./queue reset --hard origin/main

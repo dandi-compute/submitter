@@ -30,10 +30,12 @@ jobs:
     needs: CheckEngaging
     name: Clean work directory
     runs-on: [self-hosted, mit, engaging, compute]
+    defaults:
+      run:
+        working-directory: /orcd/data/dandi/001/dandi-compute
 
     steps:
       - name: Clean cached work directory
-        working-directory: /orcd/data/dandi/001/dandi-compute
         run: dandicompute clean --directory ./work/
 
   NotifyOnFailure:
