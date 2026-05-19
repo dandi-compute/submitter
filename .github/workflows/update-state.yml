@@ -39,7 +39,7 @@ jobs:
 
           git -C ./datalad/dandisets/001697 pull
 
-          dandicompute queue refresh --dandiset-directory ./datalad/dandisets/001697/ --queue-directory ./queue/
+          dandicompute queue refresh --queue ./queue/ --dandiset ./datalad/dandisets/001697/
 
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
