@@ -36,7 +36,7 @@ jobs:
         run: |
           git config --global datalad.credential.api.github.com.token "${GITHUB_TOKEN}"
           git config --global url."https://github.com/".insteadOf "git@github.com:"
-          git config --global url."https://github.com/".insteadOf "ssh://git@github.com/
+          git config --global url."https://github.com/".insteadOf "ssh://git@github.com/"
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
