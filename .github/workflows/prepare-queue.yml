@@ -74,14 +74,12 @@ jobs:
 
           dandicompute queue prepare $PREPARE_ARGS
 
-          if [ "${{ inputs.test }}" != "true" ]; then
-            git config --global user.name "github-actions[bot]"
-            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-            git -C queue add .
-            git -C queue commit --message "update" || true  # || true in case of no changes
-            git -C queue push
-          fi
+          git -C queue add .
+          git -C queue commit --message "update" || true  # || true in case of no changes
+          git -C queue push
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
