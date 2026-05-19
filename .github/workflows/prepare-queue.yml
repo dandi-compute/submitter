@@ -18,6 +18,11 @@ on:
         description: "Maximum number of jobs allowed in the backlog."
         required: false
         default: ""
+      test:
+        description: "Run in test mode (no changes will be committed or pushed)."
+        required: false
+        type: boolean
+        default: false
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -63,14 +68,20 @@ jobs:
             PREPARE_ARGS="$PREPARE_ARGS --max-backlog ${{ inputs.max_backlog }}"
           fi
 
+          if [ "${{ inputs.test }}" = "true" ]; then
+            PREPARE_ARGS="$PREPARE_ARGS --test"
+          fi
+
           dandicompute queue prepare $PREPARE_ARGS
 
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          if [ "${{ inputs.test }}" != "true" ]; then
+            git config --global user.name "github-actions[bot]"
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          git -C queue add .
-          git -C queue commit --message "update" || true  # || true in case of no changes
-          git -C queue push
+            git -C queue add .
+            git -C queue commit --message "update" || true  # || true in case of no changes
+            git -C queue push
+          fi
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
