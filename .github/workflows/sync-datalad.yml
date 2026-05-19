@@ -1,4 +1,4 @@
-name: Sync DataLad
+name: Sync DataLad Mirror
 
 on:
   workflow_dispatch:
@@ -26,9 +26,9 @@ jobs:
           labels: mit,engaging,compute
           token: ${{ secrets._GITHUB_API_KEY }}
 
-  RunAINDEphys:
+  SyncDataLadMirror:
     needs: CheckEngaging
-    name: Run AIND Ephys
+    name: Sync DataLad Mirror
     runs-on: [self-hosted, mit, engaging, compute]
 
     steps:
