@@ -53,7 +53,7 @@ jobs:
 
           git -C ./datalad/dandisets/001697 pull
 
-          PREPARE_ARGS="--dandiset-directory ./datalad/dandisets/001697/ --queue-directory ./queue/ --limit ${{ inputs.limit }}"
+          PREPARE_ARGS="--queue ./queue/ --dandiset ./datalad/dandisets/001697/ --limit ${{ inputs.limit }}"
 
           if [ -n "${{ inputs.min_waiting }}" ] && [ "${{ inputs.min_waiting }}" != "0" ]; then
             PREPARE_ARGS="$PREPARE_ARGS --min-waiting ${{ inputs.min_waiting }}"
