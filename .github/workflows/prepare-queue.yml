@@ -1,5 +1,8 @@
 name: Prepare queue
 
+permissions:
+  contents: read
+
 on:
   workflow_dispatch:
     inputs:
@@ -39,6 +42,8 @@ jobs:
   PrepareQueue:
     needs: CheckEngaging
     name: Prepare AIND queue
+    permissions:
+      contents: write
     runs-on: [self-hosted, mit, engaging, compute]
 
     steps:
@@ -73,6 +78,9 @@ jobs:
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
     needs: [CheckEngaging, PrepareQueue]
+    permissions:
+      contents: read
+      actions: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
