@@ -21,7 +21,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  DANDI_API_KEY: ${{ vars.DANDI_API_KEY }}
+  DANDI_API_KEY: ${{ secrets.DANDI_API_KEY }}
 
 jobs:
   CheckEngaging:
