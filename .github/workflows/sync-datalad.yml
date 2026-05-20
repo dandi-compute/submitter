@@ -1,4 +1,4 @@
-name: Sync DataLad Mirror
+name: Sync DataLad mirror
 
 on:
   workflow_dispatch:
@@ -32,7 +32,7 @@ jobs:
   SyncDataLadMirror:
     needs: CheckEngaging
     if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
-    name: Sync DataLad Mirror
+    name: Sync DataLad mirror
     runs-on: [self-hosted, mit, engaging, compute]
 
     steps:
