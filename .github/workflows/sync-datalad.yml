@@ -1,4 +1,4 @@
-name: Sync DataLad
+name: Sync DataLad Mirror
 
 on:
   workflow_dispatch:
@@ -26,23 +26,21 @@ jobs:
           labels: mit,engaging,compute
           token: ${{ secrets._GITHUB_API_KEY }}
 
-  RunAINDEphys:
+  SyncDataLadMirror:
     needs: CheckEngaging
-    name: Run AIND Ephys
+    name: Sync DataLad Mirror
     runs-on: [self-hosted, mit, engaging, compute]
 
     steps:
       - name: Configure Git
         run: |
           git config --global datalad.credential.api.github.com.token "${GITHUB_TOKEN}"
-          git config --global url."https://github.com/".insteadOf "git@github.com:"
-          git config --global url."https://github.com/".insteadOf "ssh://git@github.com/
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Update DataLad dataset
         working-directory: /orcd/data/dandi/001/dandi-compute
-        run: backups2datalad --backup-root ./datalad/ --config ./datalad/config.yaml update-from-backup 001697
+        run: backups2datalad --config ./datalad/config.yaml update-from-backup 001697
 
       - name: Push to GitHub
         working-directory: /orcd/data/dandi/001/dandi-compute
@@ -50,7 +48,7 @@ jobs:
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
-    needs: [CheckEngaging, RunAINDEphys]
+    needs: [CheckEngaging, SyncDataLadMirror]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
