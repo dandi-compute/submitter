@@ -26,7 +26,7 @@ jobs:
   UpdateQueueState:
     needs: CheckEngaging
     if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
-    name: Run AIND Ephys
+    name: Update queue state
     runs-on: [self-hosted, mit, engaging, compute]
 
     steps:
