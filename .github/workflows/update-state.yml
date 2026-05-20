@@ -3,7 +3,7 @@ name: Update queue state
 on:
   workflow_dispatch:
   workflow_run:
-    workflows: ["Sync DataLad"]
+    workflows: ["Sync DataLad mirror"]
     types: [completed]
 
 concurrency:
