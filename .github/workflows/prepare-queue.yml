@@ -10,14 +10,6 @@ on:
         description: "Maximum number of jobs to add to the queue."
         required: false
         default: "5"
-      min_waiting:
-        description: "Skip preparation if at least this many jobs are already waiting."
-        required: false
-        default: "10"
-      max_backlog:
-        description: "Maximum number of jobs allowed in the backlog."
-        required: false
-        default: "10"
       test:
         description: "Run in test mode (no changes will be committed or pushed)."
         required: false
@@ -58,15 +50,7 @@ jobs:
 
           git -C ./datalad/dandisets/001697 pull
 
-          PREPARE_ARGS="--queue ./queue/ --limit ${{ inputs.limit }}"
-
-          if [ -n "${{ inputs.min_waiting }}" ] && [ "${{ inputs.min_waiting }}" != "0" ]; then
-            PREPARE_ARGS="$PREPARE_ARGS --min-waiting ${{ inputs.min_waiting }}"
-          fi
-
-          if [ -n "${{ inputs.max_backlog }}" ]; then
-            PREPARE_ARGS="$PREPARE_ARGS --max-backlog ${{ inputs.max_backlog }}"
-          fi
+          PREPARE_ARGS="--queue ./queue/ --pipeline ./aind-ephys-pipeline.cody/ --limit ${{ inputs.limit }}"
 
           if [ "${{ inputs.test }}" = "true" ]; then
             PREPARE_ARGS="$PREPARE_ARGS --test"
