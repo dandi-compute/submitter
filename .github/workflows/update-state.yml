@@ -10,6 +10,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
 
+env:
+  DANDI_API_KEY: ${{ secrets.DANDI_API_KEY }}
+
 jobs:
   CheckEngaging:
     name: Pre-run Check
