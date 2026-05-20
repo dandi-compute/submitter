@@ -42,7 +42,7 @@ jobs:
 
       - name: Update DataLad dataset
         working-directory: /orcd/data/dandi/001/dandi-compute
-        run: backups2datalad --backup-root ./datalad/ --config ./datalad/config.yaml update-from-backup 001697
+        run: backups2datalad --config ./datalad/config.yaml update-from-backup 001697
 
       - name: Push to GitHub
         working-directory: /orcd/data/dandi/001/dandi-compute
