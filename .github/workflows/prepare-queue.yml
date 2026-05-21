@@ -59,6 +59,7 @@ jobs:
             PREPARE_ARGS="$PREPARE_ARGS --test"
           fi
 
+          echo "Running: dandicompute queue prepare $PREPARE_ARGS"
           dandicompute queue prepare $PREPARE_ARGS
 
           git config --global user.name "github-actions[bot]"
