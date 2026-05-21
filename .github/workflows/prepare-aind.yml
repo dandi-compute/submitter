@@ -130,6 +130,7 @@ jobs:
             PREPARE_ARGS+=(--queue "${{ inputs.queue }}")
           fi
 
+          echo "Running: dandicompute ${PREPARE_ARGS[*]}"
           dandicompute "${PREPARE_ARGS[@]}"
 
   NotifyOnFailure:
