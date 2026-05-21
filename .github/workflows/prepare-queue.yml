@@ -1,4 +1,4 @@
-name: Prepare queue
+name: Prepare AIND job
 
 permissions:
   contents: write
@@ -6,15 +6,61 @@ permissions:
 on:
   workflow_dispatch:
     inputs:
-      limit:
-        description: "Maximum number of jobs to add to the queue."
-        required: false
-        default: "5"
       test:
-        description: "Prepare only test assets."
+        description: "Prepare test queue entries instead of a specific AIND job."
         required: false
         type: boolean
         default: false
+      id:
+        description: "Content ID to process. Leave blank to prepare from a dandiset clone instead."
+        required: false
+        type: string
+        default: ""
+      dandiset:
+        description: "Dandiset ID to process when `id` is not provided."
+        required: false
+        type: string
+        default: "001697"
+      dandipath:
+        description: "Local dandiset path to process when `id` is not provided."
+        required: false
+        type: string
+        default: "./datalad/dandisets/001697/"
+      config:
+        description: "Registered configuration key to use."
+        required: false
+        type: string
+        default: "default"
+      pipeline:
+        description: "Local path to the AIND pipeline repository."
+        required: false
+        type: string
+        default: "./aind-ephys-pipeline.cody/"
+      version:
+        description: "Pipeline version to use. Required unless `test` is enabled."
+        required: false
+        type: string
+        default: ""
+      params:
+        description: "Registered pipeline parameter set to use."
+        required: false
+        type: string
+        default: "default"
+      submit:
+        description: "Automatically submit the prepared job."
+        required: false
+        type: boolean
+        default: false
+      silent:
+        description: "Suppress command output from `dandicompute prepare aind`."
+        required: false
+        type: boolean
+        default: false
+      queue:
+        description: "Queue root directory containing queue_config.json (used only with `test`)."
+        required: false
+        type: string
+        default: "./queue/"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -38,35 +84,61 @@ jobs:
 
   PrepareQueue:
     needs: CheckEngaging
-    name: Prepare AIND queue
+    name: Prepare AIND job
     permissions:
       contents: write
     runs-on: [self-hosted, mit, engaging, compute]
 
     steps:
-      - name: Prepare queue
+      - name: Prepare AIND job
         working-directory: /orcd/data/dandi/001/dandi-compute
         run: |
-          git -C ./queue fetch origin
-          git -C ./queue reset --hard origin/main
-          git -C ./queue clean -fd
-
           git -C ./datalad/dandisets/001697 pull
 
-          PREPARE_ARGS="--queue ./queue/ --pipeline ./aind-ephys-pipeline.cody/ --limit ${{ inputs.limit }}"
+          PREPARE_ARGS=(prepare aind)
 
           if [ "${{ inputs.test }}" = "true" ]; then
-            PREPARE_ARGS="$PREPARE_ARGS --test"
+            git -C ./queue fetch origin
+            git -C ./queue reset --hard origin/main
+            git -C ./queue clean -fd
+
+            PREPARE_ARGS+=(--test --queue "${{ inputs.queue }}")
           fi
 
-          dandicompute queue prepare $PREPARE_ARGS
+          if [ -n "${{ inputs.id }}" ]; then
+            PREPARE_ARGS+=(--id "${{ inputs.id }}")
+          else
+            PREPARE_ARGS+=(--dandiset "${{ inputs.dandiset }}" --dandipath "${{ inputs.dandipath }}")
+          fi
 
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          PREPARE_ARGS+=(--config "${{ inputs.config }}" --params "${{ inputs.params }}")
 
-          git -C queue add .
-          git -C queue commit --message "update" || true  # || true in case of no changes
-          git -C queue push
+          if [ -n "${{ inputs.pipeline }}" ]; then
+            PREPARE_ARGS+=(--pipeline "${{ inputs.pipeline }}")
+          fi
+
+          if [ -n "${{ inputs.version }}" ]; then
+            PREPARE_ARGS+=(--version "${{ inputs.version }}")
+          fi
+
+          if [ "${{ inputs.submit }}" = "true" ]; then
+            PREPARE_ARGS+=(--submit)
+          fi
+
+          if [ "${{ inputs.silent }}" = "true" ]; then
+            PREPARE_ARGS+=(--silent)
+          fi
+
+          dandicompute "${PREPARE_ARGS[@]}"
+
+          if [ "${{ inputs.test }}" = "true" ]; then
+            git config --global user.name "github-actions[bot]"
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+            git -C queue add .
+            git -C queue commit --message "update" || true  # || true in case of no changes
+            git -C queue push
+          fi
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
@@ -93,9 +165,9 @@ jobs:
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "DANDI Compute: AIND Queue preparation failed (MIT Engaging dispatch)"
+          subject: "DANDI Compute: AIND job preparation failed (MIT Engaging dispatch)"
           to: cody.c.baker.phd@gmail.com  # Add more with comma separation (no spaces)
           from: Typhon CRON
           body: |
-            The manual dispatch of AIND queue preparation encountered an issue!
+            The manual dispatch of AIND job preparation encountered an issue!
             Please check status at: https://github.com/dandi-compute/submitter/actions/workflows/prepare-queue.yml

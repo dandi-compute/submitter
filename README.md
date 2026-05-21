@@ -37,13 +37,20 @@ The repository is kept public to allow anyone to see the runtime logs of the sub
 
 
 
-## How to prepare the queue (manual)
+## How to prepare an AIND job (manual)
 
-Use the [Prepare queue](https://github.com/dandi-compute/submitter/actions/workflows/prepare-queue.yml) workflow dispatch.
+Use the [Prepare AIND job](https://github.com/dandi-compute/submitter/actions/workflows/prepare-queue.yml) workflow dispatch.
 
 | Input | Description | Default |
 |---|---|---|
-| `limit` | Maximum number of jobs to add to the queue. | `5` |
-| `min_waiting` | Skip preparation if at least this many jobs are already waiting. | `0` |
-| `max_backlog` | Maximum number of jobs allowed in the backlog (leave blank for no cap). | _(none)_ |
-| `test` | Run in test mode (no changes will be committed or pushed). | `false` |
+| `test` | Prepare test queue entries instead of a specific AIND job. | `false` |
+| `id` | Content ID to process. Leave blank to prepare from a dandiset clone instead. | _(blank)_ |
+| `dandiset` | Dandiset ID to process when `id` is not provided. | `001697` |
+| `dandipath` | Local dandiset path to process when `id` is not provided. | `./datalad/dandisets/001697/` |
+| `config` | Registered configuration key to use. | `default` |
+| `pipeline` | Local path to the AIND pipeline repository. | `./aind-ephys-pipeline.cody/` |
+| `version` | Pipeline version to use. Required unless `test` is enabled. | _(blank)_ |
+| `params` | Registered pipeline parameter set to use. | `default` |
+| `submit` | Automatically submit the prepared job. | `false` |
+| `silent` | Suppress command output from `dandicompute prepare aind`. | `false` |
+| `queue` | Queue root directory containing `queue_config.json` (used only with `test`). | `./queue/` |

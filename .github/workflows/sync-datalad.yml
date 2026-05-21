@@ -4,9 +4,6 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '15 * * * *'
-  workflow_run:
-    workflows: ["Prepare queue"]
-    types: [completed]
 
 permissions:
   contents: read
@@ -34,7 +31,6 @@ jobs:
 
   SyncDataLadMirror:
     needs: CheckEngaging
-    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     name: Sync DataLad mirror
     runs-on: [self-hosted, mit, engaging, compute]
 
