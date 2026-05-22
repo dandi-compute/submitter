@@ -72,7 +72,7 @@ jobs:
       - name: Cancel if offline
         uses: ./.github/actions/check-runner
         with:
-          labels: mit,engaging,compute
+          labels: mit,engaging,submitter
           token: ${{ secrets._GITHUB_API_KEY }}
 
   PrepareAIND:
