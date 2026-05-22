@@ -78,7 +78,7 @@ jobs:
   PrepareAIND:
     needs: CheckEngaging
     name: Prepare AIND job
-    runs-on: [self-hosted, mit, engaging, compute]
+    runs-on: [self-hosted, mit, engaging, submitter]
 
     steps:
       - name: Prepare AIND job
