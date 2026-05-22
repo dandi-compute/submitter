@@ -10,11 +10,6 @@ on:
         description: "Maximum number of jobs to add to the queue."
         required: false
         default: "5"
-      test:
-        description: "Prepare only test assets."
-        required: false
-        type: boolean
-        default: false
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -55,14 +50,7 @@ jobs:
 
           git -C ./datalad/dandisets/001697 pull
 
-          PREPARE_ARGS="--queue ./queue/ --pipeline ./aind-ephys-pipeline.cody/ --limit ${{ inputs.limit }}"
-
-          if [ "${{ inputs.test }}" = "true" ]; then
-            PREPARE_ARGS="$PREPARE_ARGS --test"
-          fi
-
-          echo "Running: dandicompute queue prepare $PREPARE_ARGS"
-          dandicompute queue prepare $PREPARE_ARGS
+          dandicompute queue prepare --queue ./queue/ --pipeline ./aind-ephys-pipeline.cody/ --limit ${{ inputs.limit }}
 
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
