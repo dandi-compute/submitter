@@ -18,15 +18,15 @@ The repository is kept public to allow anyone to see the runtime logs of the sub
 
 
 
-## How to setup the runner
+## How to setup the runners
 
 1. Go to Settings -> Actions -> Runners -> New self-hosted runner -> Linux
 2. Log into https://engaging-ood.mit.edu/ -> Open a new cluster shell
 3. `cd /orcd/data/dandi/001/dandi-compute/submitter`
 4. Follow copy & paste instructions from Settings
 5. Use the default runner group
-6. Give this runner the name `compute`
-7. Add the labels `mit`, `engaging`, and `compute`
+6. Give the runners the name `submitter` or `monitor` (correspondingly)
+7. Add the labels `mit`, `engaging`, and `submitter` or `monitor` (correspondingly)
 8. Use the default work directory
 9. Setup a `crontab` with the following:
 
