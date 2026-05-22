@@ -27,14 +27,14 @@ jobs:
       - name: Cancel if offline
         uses: ./.github/actions/check-runner
         with:
-          labels: mit,engaging,compute
+          labels: mit,engaging,submitter
           token: ${{ secrets._GITHUB_API_KEY }}
 
   UpdateQueueState:
     needs: CheckEngaging
     if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     name: Update queue state
-    runs-on: [self-hosted, mit, engaging, compute]
+    runs-on: [self-hosted, mit, engaging, submitter]
 
     steps:
       - name: Update queue state
