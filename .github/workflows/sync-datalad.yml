@@ -49,6 +49,10 @@ jobs:
         working-directory: /orcd/data/dandi/001/dandi-compute
         run: backups2datalad --config ./datalad/config.yaml update-from-backup 001697
 
+      - name: Fix annexed text files
+        working-directory: /orcd/data/dandi/001/dandi-compute/datalad/dandisets/001697
+        run: bash /orcd/data/dandi/001/dandi-compute/submitter/fix_annex.sh
+
       - name: Push to GitHub
         working-directory: /orcd/data/dandi/001/dandi-compute
         run: datalad -C ./datalad/dandisets/001697 push --to github
