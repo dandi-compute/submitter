@@ -10,6 +10,8 @@ on:
         description: "Maximum number of jobs to add to the queue."
         required: false
         default: "5"
+  schedule:
+    - cron: '0 */6 * * *'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
