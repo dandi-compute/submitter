@@ -52,7 +52,7 @@ jobs:
 
           git -C ./datalad/dandisets/001697 pull
 
-          dandicompute queue prepare --queue ./queue/ --pipeline ./aind-ephys-pipeline.cody/ --limit ${{ inputs.limit }}
+          dandicompute queue prepare --queue ./queue/ --pipeline ./aind-ephys-pipeline.cody/ --limit ${{ inputs.limit || 5 }}
 
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
