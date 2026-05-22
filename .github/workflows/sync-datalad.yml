@@ -3,7 +3,7 @@ name: Sync DataLad mirror
 on:
   workflow_dispatch:
   schedule:
-    - cron: '15 * * * *'
+    - cron: '0/15 * * * *'
   workflow_run:
     workflows: ["Prepare queue"]
     types: [completed]
