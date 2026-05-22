@@ -10,6 +10,8 @@ on:
         description: "Maximum number of jobs to add to the queue."
         required: false
         default: "5"
+  schedule:
+    - cron: '0 */6 * * *'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -43,7 +45,7 @@ jobs:
         working-directory: /orcd/data/dandi/001/dandi-compute
         run: |
           pip install -U dandi
-        
+
           git -C ./queue fetch origin
           git -C ./queue reset --hard origin/main
           git -C ./queue clean -fd
