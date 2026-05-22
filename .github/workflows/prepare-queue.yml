@@ -41,7 +41,7 @@ jobs:
     name: Prepare AIND queue
     permissions:
       contents: write
-    runs-on: [self-hosted, mit, engaging, compute]
+    runs-on: [self-hosted, mit, engaging, submitter]
 
     steps:
       - name: Prepare queue
