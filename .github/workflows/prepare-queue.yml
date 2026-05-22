@@ -9,7 +9,7 @@ on:
       limit:
         description: "Maximum number of jobs to add to the queue."
         required: false
-        default: "5"
+        default: "15"
   schedule:
     - cron: '0 */6 * * *'
 
@@ -52,7 +52,7 @@ jobs:
 
           git -C ./datalad/dandisets/001697 pull
 
-          dandicompute queue prepare --queue ./queue/ --pipeline ./aind-ephys-pipeline.cody/ --limit ${{ inputs.limit || 5 }}
+          dandicompute queue prepare --queue ./queue/ --pipeline ./aind-ephys-pipeline.cody/ --limit ${{ inputs.limit || 15 }}
 
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
