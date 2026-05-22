@@ -47,6 +47,8 @@ jobs:
       - name: Prepare queue
         working-directory: /orcd/data/dandi/001/dandi-compute
         run: |
+          pip install -U dandi
+        
           git -C ./queue fetch origin
           git -C ./queue reset --hard origin/main
           git -C ./queue clean -fd
