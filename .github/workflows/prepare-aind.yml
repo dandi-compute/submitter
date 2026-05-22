@@ -84,6 +84,8 @@ jobs:
       - name: Prepare AIND job
         working-directory: /orcd/data/dandi/001/dandi-compute
         run: |
+          pip install -U dandi
+        
           PREPARE_ARGS=(prepare aind)
 
           if [ "${{ inputs.test }}" = "true" ]; then
