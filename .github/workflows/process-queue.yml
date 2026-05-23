@@ -44,6 +44,10 @@ jobs:
         working-directory: /orcd/data/dandi/001/dandi-compute/dandiset/001697
         run: dandi upload --validation skip --allow-any-path
 
+      - name: Wipe local DANDI state
+        working-directory: /orcd/data/dandi/001/dandi-compute
+        run: rm -rf ./dandiset/001697/derivatives/
+
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
     needs: [CheckEngaging, RunAINDEphys]
