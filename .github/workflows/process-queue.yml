@@ -3,7 +3,7 @@ name: Process AIND Queue
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 * * * *'
+    - cron: '15 * * * *'
   workflow_run:
     workflows: ["Prepare queue"]
     types: [completed]
