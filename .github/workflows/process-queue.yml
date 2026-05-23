@@ -44,7 +44,7 @@ jobs:
 
       - name: Update DANDI backend
         working-directory: /orcd/data/dandi/001/dandi-compute/dandiset/001697
-        run: dandi upload --validation skip --allow-any-path
+        run: dandi upload --validation skip --allow-all
 
       - name: Wipe local DANDI state
         working-directory: /orcd/data/dandi/001/dandi-compute
