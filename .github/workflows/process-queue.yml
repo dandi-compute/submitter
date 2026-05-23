@@ -2,6 +2,8 @@ name: Process AIND Queue
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 * * * *'
 
 permissions:
   contents: read
