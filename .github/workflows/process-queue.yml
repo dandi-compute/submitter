@@ -16,6 +16,7 @@ concurrency:
 
 env:
   DANDI_API_KEY: ${{ secrets.DANDI_API_KEY }}
+  DANDI_DEVEL: ${{ secrets.DANDI_DEVEL }}
   KACHERY_API_KEY: ${{ secrets.KACHERY_API_KEY }}
 
 jobs:
@@ -40,10 +41,11 @@ jobs:
     steps:
       - name: Run queue processing script
         working-directory: /orcd/data/dandi/001/dandi-compute
-        run: |
-          git -C ./datalad/dandisets/001697 pull
+        run: dandicompute queue process --queue ./queue --dandiset ./datalad/dandisets/001697
 
-          dandicompute queue process --queue ./queue --dandiset ./datalad/dandisets/001697
+      - name: Update DANDI backend
+        working-directory: /orcd/data/dandi/001/dandi-compute/dandiset/001697
+        run: dandi upload --validation skip --allow-any-path
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
