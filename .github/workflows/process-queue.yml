@@ -38,7 +38,7 @@ jobs:
     steps:
       - name: Run queue processing script
         working-directory: /orcd/data/dandi/001/dandi-compute
-        run: dandicompute queue process --queue ./queue --dandiset ./dandiset/001697
+        run: dandicompute queue process --queue ./queue --dandiset ./dandiset/001697 --datalad ./datalad/dandisets/001697
 
       - name: Update DANDI backend
         working-directory: /orcd/data/dandi/001/dandi-compute/dandiset/001697
