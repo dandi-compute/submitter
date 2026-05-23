@@ -52,7 +52,7 @@ jobs:
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
-    needs: [CheckEngaging, RunAINDEphys]
+    needs: [CheckEngaging, ProcessAINDQueue]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
