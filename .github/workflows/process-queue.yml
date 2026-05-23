@@ -2,9 +2,6 @@ name: Process AIND Queue
 
 on:
   workflow_dispatch:
-  workflow_run:
-    workflows: ["Update queue state"]
-    types: [completed]
 
 permissions:
   contents: read
