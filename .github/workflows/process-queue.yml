@@ -41,20 +41,9 @@ jobs:
       - name: Run queue processing script
         working-directory: /orcd/data/dandi/001/dandi-compute
         run: |
-          git -C ./queue fetch origin
-          git -C ./queue reset --hard origin/main
-          git -C ./queue clean -fd
-
           git -C ./datalad/dandisets/001697 pull
 
           dandicompute queue process --queue ./queue --dandiset ./datalad/dandisets/001697
-
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-          git -C queue add .
-          git -C queue commit --message "update" || true  # || true in case of no changes
-          git -C queue push
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
