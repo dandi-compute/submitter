@@ -43,9 +43,9 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Save DataLad dataset (in case became dirty somehow)
-        working-directory: /orcd/data/dandi/001/dandi-compute
-        run: datalad -C ./datalad/dandisets/001697 save --message "saving pre-state"
+      #- name: Save DataLad dataset (in case became dirty somehow)
+      #  working-directory: /orcd/data/dandi/001/dandi-compute
+      #  run: datalad -C ./datalad/dandisets/001697 save --message "saving pre-state"
 
       - name: Update DataLad dataset
         working-directory: /orcd/data/dandi/001/dandi-compute
