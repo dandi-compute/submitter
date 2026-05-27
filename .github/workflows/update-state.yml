@@ -3,7 +3,7 @@ name: Update queue state
 on:
   workflow_dispatch:
   workflow_run:
-    workflows: ["Sync DataLad mirror"]
+    workflows: ["Prepare queue", "Process AIND queue", "Prepare AIND job"]
     types: [completed]
 
 permissions:
