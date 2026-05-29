@@ -44,8 +44,6 @@ jobs:
           git -C ./queue reset --hard origin/main
           git -C ./queue clean -fd
 
-          git -C ./datalad/dandisets/001697 pull
-
           dandicompute queue refresh --queue ./queue/
 
           git config --global user.name "github-actions[bot]"
