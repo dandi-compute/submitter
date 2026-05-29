@@ -31,7 +31,7 @@ on:
       pipeline:
         description: "Local path to pipeline repository."
         required: false
-        default: "./aind-ephys-pipeline.cody"
+        default: "./aind-ephys-pipeline/"
       version:
         description: "Pipeline version (required when test=false)."
         required: false
