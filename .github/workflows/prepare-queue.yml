@@ -61,6 +61,9 @@ jobs:
           git -C queue commit --message "update" || true  # || true in case of no changes
           git -C queue push
 
+      - name: Wait before finishing
+        run: sleep 120
+
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
     needs: [CheckEngaging, PrepareQueue]

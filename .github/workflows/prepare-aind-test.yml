@@ -77,6 +77,9 @@ jobs:
           echo "Running: dandicompute ${PREPARE_ARGS[*]}"
           dandicompute "${PREPARE_ARGS[@]}"
 
+      - name: Wait before finishing
+        run: sleep 120
+
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
     needs: [CheckEngaging, PrepareAINDTest]
