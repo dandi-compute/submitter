@@ -65,7 +65,7 @@ jobs:
           if [ -n "${{ inputs.params }}" ]; then
             PREPARE_ARGS+=(--params "${{ inputs.params }}")
           fi
-          
+
           if [ -n "${{ inputs.config }}" ]; then
             PREPARE_ARGS+=(--config "${{ inputs.config }}")
           fi
