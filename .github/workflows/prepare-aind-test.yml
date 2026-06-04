@@ -1,4 +1,4 @@
-name: Prepare AIND job
+name: Prepare AIND test job
 
 permissions:
   contents: read
@@ -8,15 +8,11 @@ on:
   workflow_dispatch:
     inputs:
       id:
-        description: "Content ID to process (required unless dandiset and dandipath are provided)."
+        description: "Content ID to process (required unless dandiset is provided)."
         required: false
         default: ""
       dandiset:
         description: "Dandiset ID (required unless id is provided)."
-        required: false
-        default: ""
-      dandipath:
-        description: "Local Dandiset path (required unless id is provided)."
         required: false
         default: ""
       config:
@@ -27,24 +23,14 @@ on:
         description: "Local path to pipeline repository."
         required: false
         default: "./aind-ephys-pipeline/"
-      version:
-        description: "Pipeline version."
-        required: false
-        default: ""
       params:
         description: "Parameters key."
         required: false
         default: "default"
-      submit:
-        description: "Automatically submit after preparation."
+      queue:
+        description: "Queue directory path."
         required: false
-        type: boolean
-        default: false
-      silent:
-        description: "Suppress output messages."
-        required: false
-        type: boolean
-        default: false
+        default: "./queue"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -66,18 +52,18 @@ jobs:
           labels: mit,engaging,submitter
           token: ${{ secrets._GITHUB_API_KEY }}
 
-  PrepareAIND:
+  PrepareAINDTest:
     needs: CheckEngaging
-    name: Prepare AIND job
+    name: Prepare AIND test job
     runs-on: [self-hosted, mit, engaging, submitter]
 
     steps:
-      - name: Prepare AIND job
+      - name: Prepare AIND test job
         working-directory: /orcd/data/dandi/001/dandi-compute
         run: |
           pip install -U dandi
 
-          PREPARE_ARGS=(prepare aind)
+          PREPARE_ARGS=(prepare aind --test)
 
           if [ -n "${{ inputs.id }}" ]; then
             PREPARE_ARGS+=(--id "${{ inputs.id }}")
@@ -85,10 +71,6 @@ jobs:
 
           if [ -n "${{ inputs.dandiset }}" ]; then
             PREPARE_ARGS+=(--dandiset "${{ inputs.dandiset }}")
-          fi
-
-          if [ -n "${{ inputs.dandipath }}" ]; then
-            PREPARE_ARGS+=(--dandipath "${{ inputs.dandipath }}")
           fi
 
           if [ -n "${{ inputs.config }}" ]; then
@@ -99,20 +81,12 @@ jobs:
             PREPARE_ARGS+=(--pipeline "${{ inputs.pipeline }}")
           fi
 
-          if [ -n "${{ inputs.version }}" ]; then
-            PREPARE_ARGS+=(--version "${{ inputs.version }}")
-          fi
-
           if [ -n "${{ inputs.params }}" ]; then
             PREPARE_ARGS+=(--params "${{ inputs.params }}")
           fi
 
-          if [ "${{ inputs.submit }}" = "true" ]; then
-            PREPARE_ARGS+=(--submit)
-          fi
-
-          if [ "${{ inputs.silent }}" = "true" ]; then
-            PREPARE_ARGS+=(--silent)
+          if [ -n "${{ inputs.queue }}" ]; then
+            PREPARE_ARGS+=(--queue "${{ inputs.queue }}")
           fi
 
           echo "Running: dandicompute ${PREPARE_ARGS[*]}"
@@ -120,7 +94,7 @@ jobs:
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
-    needs: [CheckEngaging, PrepareAIND]
+    needs: [CheckEngaging, PrepareAINDTest]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -129,7 +103,7 @@ jobs:
         id: cooldown
         uses: ./.github/actions/check-cooldown
         with:
-          workflow_file: prepare-aind.yml
+          workflow_file: prepare-aind-test.yml
           token: ${{ github.token }}
 
       - name: Send email notification on failure
@@ -140,9 +114,9 @@ jobs:
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "DANDI Compute: AIND job preparation failed (MIT Engaging dispatch)"
+          subject: "DANDI Compute: AIND test job preparation failed (MIT Engaging dispatch)"
           to: cody.c.baker.phd@gmail.com  # Add more with comma separation (no spaces)
           from: Typhon CRON
           body: |
-            The manual dispatch of AIND job preparation encountered an issue!
-            Please check status at: https://github.com/dandi-compute/submitter/actions/workflows/prepare-aind.yml
+            The manual dispatch of AIND test job preparation encountered an issue!
+            Please check status at: https://github.com/dandi-compute/submitter/actions/workflows/prepare-aind-test.yml
