@@ -7,24 +7,16 @@ permissions:
 on:
   workflow_dispatch:
     inputs:
-      id:
-        description: "Content ID to process (required unless dandiset is provided)."
-        required: false
-        default: ""
-      dandiset:
-        description: "Dandiset ID (required unless id is provided)."
-        required: false
-        default: ""
-      config:
-        description: "Registered configuration key."
-        required: false
-        default: "default"
       pipeline:
         description: "Local path to pipeline repository."
         required: false
         default: "./aind-ephys-pipeline/"
       params:
         description: "Parameters key."
+        required: false
+        default: "default"
+      config:
+        description: "Registered configuration key."
         required: false
         default: "default"
       queue:
