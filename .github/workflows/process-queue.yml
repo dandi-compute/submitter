@@ -43,10 +43,9 @@ jobs:
         run: flock -n ./flocks/process_queue.lock dandicompute queue process --queue ./queue/ --processing ./processing/
 
       - name: Re-write crontab
-        working-directory: /orcd/data/dandi/001/dandi-compute
         run:
           ssh login007
-          crontab ./submitter/launcher/crontab
+          crontab /orcd/data/dandi/001/dandi-compute/submitter/launcher/crontab
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
