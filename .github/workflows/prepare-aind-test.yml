@@ -57,17 +57,6 @@ jobs:
 
           PREPARE_ARGS=(prepare aind --test)
 
-          if [ -n "${{ inputs.id }}" ]; then
-            PREPARE_ARGS+=(--id "${{ inputs.id }}")
-          fi
-
-          if [ -n "${{ inputs.dandiset }}" ]; then
-            PREPARE_ARGS+=(--dandiset "${{ inputs.dandiset }}")
-          fi
-
-          if [ -n "${{ inputs.config }}" ]; then
-            PREPARE_ARGS+=(--config "${{ inputs.config }}")
-          fi
 
           if [ -n "${{ inputs.pipeline }}" ]; then
             PREPARE_ARGS+=(--pipeline "${{ inputs.pipeline }}")
@@ -75,6 +64,10 @@ jobs:
 
           if [ -n "${{ inputs.params }}" ]; then
             PREPARE_ARGS+=(--params "${{ inputs.params }}")
+          fi
+          
+          if [ -n "${{ inputs.config }}" ]; then
+            PREPARE_ARGS+=(--config "${{ inputs.config }}")
           fi
 
           if [ -n "${{ inputs.queue }}" ]; then
