@@ -47,6 +47,9 @@ jobs:
           ssh login007
           crontab /orcd/data/dandi/001/dandi-compute/submitter/launcher/crontab
 
+      - name: Wait before finishing
+        run: sleep 120
+
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
     needs: [CheckEngaging, ProcessAINDQueue]
