@@ -7,10 +7,6 @@ permissions:
 on:
   workflow_dispatch:
     inputs:
-      pipeline:
-        description: "Local path to pipeline repository."
-        required: false
-        default: "./aind-ephys-pipeline/"
       params:
         description: "Parameters key."
         required: false
@@ -19,10 +15,6 @@ on:
         description: "Registered configuration key."
         required: false
         default: "default"
-      queue:
-        description: "Queue directory path."
-        required: false
-        default: "./queue"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
