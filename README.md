@@ -39,6 +39,16 @@ The repository is kept public to allow anyone to see the runtime logs of the sub
 
 
 
+## How to process the queue (manual)
+
+Use the [Process queue](https://github.com/dandi-compute/submitter/actions/workflows/process-queue.yml) workflow dispatch.
+
+| Input | Description | Default |
+|---|---|---|
+| `test` | Run in test mode (no changes will be committed or pushed). | `false` |
+
+
+
 ## How to prepare the queue (manual)
 
 Use the [Prepare queue](https://github.com/dandi-compute/submitter/actions/workflows/prepare-queue.yml) workflow dispatch.

@@ -2,6 +2,12 @@ name: Process AIND Queue
 
 on:
   workflow_dispatch:
+    inputs:
+      test:
+        description: "Run in test mode (no changes will be committed or pushed)."
+        required: false
+        default: false
+        type: boolean
   schedule:
     - cron: '15 * * * *'
 
@@ -40,7 +46,7 @@ jobs:
     steps:
       - name: Run queue processing script
         working-directory: /orcd/data/dandi/001/dandi-compute
-        run: flock -n ./flocks/process_queue.lock dandicompute queue process --queue ./queue/ --processing ./processing/
+        run: flock -n ./flocks/process_queue.lock dandicompute queue process --queue ./queue/ --processing ./processing/${{ inputs.test && ' --test' || '' }}
 
       - name: Re-write crontab
         run:
