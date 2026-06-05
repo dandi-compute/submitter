@@ -78,6 +78,11 @@ jobs:
           pip install -U dandi
 
           PREPARE_ARGS=(prepare aind)
+          PREPARE_ARGS+=(--pipeline "./aind-ephys-pipeline/")
+
+          if [ -n "${{ inputs.version }}" ]; then
+            PREPARE_ARGS+=(--version "${{ inputs.version }}")
+          fi
 
           if [ -n "${{ inputs.id }}" ]; then
             PREPARE_ARGS+=(--id "${{ inputs.id }}")
@@ -91,20 +96,12 @@ jobs:
             PREPARE_ARGS+=(--dandipath "${{ inputs.dandipath }}")
           fi
 
-          if [ -n "${{ inputs.config }}" ]; then
-            PREPARE_ARGS+=(--config "${{ inputs.config }}")
-          fi
-
-          if [ -n "${{ inputs.pipeline }}" ]; then
-            PREPARE_ARGS+=(--pipeline "${{ inputs.pipeline }}")
-          fi
-
-          if [ -n "${{ inputs.version }}" ]; then
-            PREPARE_ARGS+=(--version "${{ inputs.version }}")
-          fi
-
           if [ -n "${{ inputs.params }}" ]; then
             PREPARE_ARGS+=(--params "${{ inputs.params }}")
+          fi
+
+          if [ -n "${{ inputs.config }}" ]; then
+            PREPARE_ARGS+=(--config "${{ inputs.config }}")
           fi
 
           if [ "${{ inputs.submit }}" = "true" ]; then
