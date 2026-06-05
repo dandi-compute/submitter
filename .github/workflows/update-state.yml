@@ -3,7 +3,7 @@ name: Update queue state
 on:
   workflow_dispatch:
   workflow_run:
-    workflows: ["Prepare queue", "Process AIND queue", "Prepare AIND job"]
+    workflows: ["Prepare queue", "Process AIND queue", "Prepare AIND job", "Prepare AIND test job"]
     types: [completed]
 
 permissions:
