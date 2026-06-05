@@ -45,7 +45,7 @@ jobs:
       - name: Ensure DANDI CLI is kept up-to-date
         working-directory: /orcd/data/dandi/001/dandi-compute
         run: pip install -U dandi
-          
+
       - name: Prepare AIND test job
         working-directory: /orcd/data/dandi/001/dandi-compute
         run: |
