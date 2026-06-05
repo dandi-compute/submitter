@@ -56,11 +56,8 @@ jobs:
           pip install -U dandi
 
           PREPARE_ARGS=(prepare aind --test)
-
-
-          if [ -n "${{ inputs.pipeline }}" ]; then
-            PREPARE_ARGS+=(--pipeline "${{ inputs.pipeline }}")
-          fi
+          PREPARE_ARGS+=(--pipeline "./aind-ephys-pipeline/")
+          PREPARE_ARGS+=(--queue "./queue/")
 
           if [ -n "${{ inputs.params }}" ]; then
             PREPARE_ARGS+=(--params "${{ inputs.params }}")
@@ -68,10 +65,6 @@ jobs:
 
           if [ -n "${{ inputs.config }}" ]; then
             PREPARE_ARGS+=(--config "${{ inputs.config }}")
-          fi
-
-          if [ -n "${{ inputs.queue }}" ]; then
-            PREPARE_ARGS+=(--queue "${{ inputs.queue }}")
           fi
 
           echo "Running: dandicompute ${PREPARE_ARGS[*]}"
