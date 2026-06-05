@@ -46,7 +46,15 @@ jobs:
     steps:
       - name: Run queue processing script
         working-directory: /orcd/data/dandi/001/dandi-compute
-        run: flock -n ./flocks/process_queue.lock dandicompute queue process --queue ./queue/ --processing ./processing/${{ inputs.test && ' --test' || '' }}
+        run: |
+          PROCESS_ARGS=(queue process --queue ./queue/ --processing ./processing/)
+
+          if [ "${{ inputs.test }}" = "true" ]; then
+            PROCESS_ARGS+=(--test)
+          fi
+
+          echo "Running: dandicompute ${PROCESS_ARGS[*]}"
+          flock -n ./flocks/process_queue.lock dandicompute "${PROCESS_ARGS[@]}"
 
       - name: Re-write crontab
         run:
