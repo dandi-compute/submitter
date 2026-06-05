@@ -45,7 +45,7 @@ Use the [Process queue](https://github.com/dandi-compute/submitter/actions/workf
 
 | Input | Description | Default |
 |---|---|---|
-| `test` | Run in test mode (no changes will be committed or pushed). | `false` |
+| `test` | Run in test mode (the temporary submission directory will not be deleted). | `false` |
 
 
 
