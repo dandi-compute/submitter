@@ -50,8 +50,6 @@ jobs:
           git -C ./queue reset --hard origin/main
           git -C ./queue clean -fd
 
-          git -C ./datalad/dandisets/001697 pull
-
           dandicompute queue prepare --queue ./queue/ --pipeline ./aind-ephys-pipeline.cody/ --limit ${{ inputs.limit || 15 }}
 
           git config --global user.name "github-actions[bot]"
