@@ -9,7 +9,7 @@ on:
       limit:
         description: "Maximum number of jobs to add to the queue."
         required: false
-        default: "15"
+        default: "10"
   schedule:
     - cron: '0 */6 * * *'
 
@@ -52,7 +52,7 @@ jobs:
           git -C ./queue reset --hard origin/main
           git -C ./queue clean -fd
 
-          dandicompute queue prepare --queue ./queue/ --pipeline ./aind-ephys-pipeline/ --limit ${{ inputs.limit || 15 }}
+          dandicompute queue prepare --queue ./queue/ --pipeline ./aind-ephys-pipeline/ --limit ${{ inputs.limit || 10 }}
 
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
