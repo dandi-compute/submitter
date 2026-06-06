@@ -41,16 +41,18 @@ jobs:
     runs-on: [self-hosted, mit, engaging, submitter]
 
     steps:
+      - name: Ensure DANDI CLI is kept up-to-date
+        working-directory: /orcd/data/dandi/001/dandi-compute
+        run: pip install -U dandi
+
       - name: Prepare queue
         working-directory: /orcd/data/dandi/001/dandi-compute
         run: |
-          pip install -U dandi
-
           git -C ./queue fetch origin
           git -C ./queue reset --hard origin/main
           git -C ./queue clean -fd
 
-          dandicompute queue prepare --queue ./queue/ --pipeline ./aind-ephys-pipeline.cody/ --limit ${{ inputs.limit || 15 }}
+          dandicompute queue prepare --queue ./queue/ --pipeline ./aind-ephys-pipeline/ --limit ${{ inputs.limit || 15 }}
 
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
