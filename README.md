@@ -47,10 +47,6 @@ Use the [Process queue](https://github.com/dandi-compute/submitter/actions/workf
 |---|---|---|
 | `test` | Run in test mode (the temporary submission directory will not be deleted). | `false` |
 
-## How to update the codebase (manual)
-
-Use the [Update codebase](https://github.com/dandi-compute/submitter/actions/workflows/update-codebase.yml) workflow dispatch.
-
 
 
 ## How to prepare the queue (manual)
