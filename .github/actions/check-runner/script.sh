@@ -18,9 +18,11 @@ if ! command -v gh &> /dev/null; then
   exit 1
 fi
 endpoint="repos/$target/actions/runners"
-response=$(gh api "$endpoint" 2>/dev/null)
-if [ $? -ne 0 ]; then
-  echo "Error: API call failed at $endpoint" >&2
+response=$(gh api "$endpoint" 2>&1)
+rc=$?
+if [ $rc -ne 0 ]; then
+  echo "Error: API call failed at $endpoint (rc=$rc)" >&2
+  echo "gh output: $response" >&2
   exit 1
 fi
 
