@@ -37,6 +37,17 @@ The repository is kept public to allow anyone to see the runtime logs of the sub
 */1 * * * * /bin/bash -l -c 'flock -n /orcd/data/dandi/001/dandi-compute/flocks/submitter.lock -c "/orcd/data/dandi/001/dandi-compute/submitter/launcher/guarded-submit -- sbatch --output /dev/null --error=/dev/null /orcd/data/dandi/001/dandi-compute/submitter/launcher/launch_submitter.sh" || echo "$(date): lock held, skipping submit"' > /dev/null 2>&1
 ```
 
+## SLURM limits
+
+`sacctmgr show qos format=Name,MaxTRESPU -P | grep '^mit_' | grep -v '|$'`:
+
+```
+mit_normal|cpu=96,mem=386G
+mit_normal_gpu|cpu=32,gres/gpu=2,mem=515G
+mit_quicktest|cpu=48,mem=193G
+mit_preemptable|cpu=1024,gres/gpu=4,mem=4T
+```
+
 
 
 ## How to process the queue (manual)
