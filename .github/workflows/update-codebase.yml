@@ -31,11 +31,7 @@ jobs:
 
     steps:
       - name: Pull and reinstall codebase
-        shell: bash -l {0}
+        working-directory: /orcd/data/dandi/001/dandi-compute
         run: |
-          source /etc/profile.d/modules.sh
-          module load miniforge
-          conda activate /orcd/data/dandi/001/environments/name-dandi+compute_env
-          cd /orcd/data/dandi/001/dandi-compute
           git -C ./code/ pull --ff-only
           pip install -e ./code/
