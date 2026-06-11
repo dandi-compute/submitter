@@ -1,0 +1,41 @@
+name: Update codebase
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  CheckEngaging:
+    name: Pre-run Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Cancel if offline
+        uses: ./.github/actions/check-runner
+        with:
+          labels: mit,engaging,submitter
+          token: ${{ secrets._GITHUB_API_KEY }}
+
+  UpdateCodebase:
+    needs: CheckEngaging
+    name: Update codebase
+    runs-on: [self-hosted, mit, engaging, submitter]
+
+    steps:
+      - name: Pull and reinstall codebase
+        shell: bash -l {0}
+        run: |
+          source /etc/profile.d/modules.sh
+          module load miniforge
+          conda activate /orcd/data/dandi/001/environments/name-dandi+compute_env
+          cd /orcd/data/dandi/001/dandi-compute
+          git -C ./code/ pull --ff-only
+          pip install -e ./code/
