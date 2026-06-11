@@ -10,7 +10,7 @@ on:
         type: boolean
       max:
         description: "Maximum number of concurrent job submissions."
-        required: true
+        required: false
         default: 2
         type: number
 
