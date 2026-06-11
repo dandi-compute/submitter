@@ -50,9 +50,7 @@ jobs:
       - name: Run queue processing script
         working-directory: /orcd/data/dandi/001/dandi-compute
         run: |
-          MAX="${{ inputs.max }}"
-          [[ "$MAX" =~ ^[1-9][0-9]*$ ]] || { echo "Invalid input: max must be a positive integer"; exit 1; }
-          PROCESS_ARGS=(queue process --queue ./queue/ --processing ./processing/ --max "$MAX")
+          PROCESS_ARGS=(queue process --queue ./queue/ --processing ./processing/ --max "${{ inputs.max }}")
 
           if [ "${{ inputs.test }}" = "true" ]; then
             PROCESS_ARGS+=(--test)
