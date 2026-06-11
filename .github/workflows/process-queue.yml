@@ -11,7 +11,7 @@ on:
       max:
         description: "Maximum number of concurrent job submissions."
         required: false
-        default: 2
+        default: 5
         type: number
 
 permissions:
