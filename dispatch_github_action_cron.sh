@@ -2,6 +2,18 @@
 set -euo pipefail
 source "$HOME/.dandi_env"
 
+# Skip during cluster maintenance windows: SLURM holds our pending jobs with
+# "Reserved for maintenance" in the reason column, so dispatching more is futile.
+maintenance_threshold=5
+maintenance_held=$(
+  squeue --me --noheader --states=PENDING --format='%100R' \
+    | grep -c 'Reserved for maintenance' || true
+)
+if (( maintenance_held >= maintenance_threshold )); then
+  echo "Detected ${maintenance_held} jobs reserved for maintenance (threshold ${maintenance_threshold}); skipping dispatch."
+  exit 0
+fi
+
 module load miniforge
 conda activate /orcd/data/dandi/001/environments/name-dandi+compute_env
 
