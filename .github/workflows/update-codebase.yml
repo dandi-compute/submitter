@@ -2,6 +2,23 @@ name: Update codebase
 
 on:
   workflow_dispatch:
+    inputs:
+      directory:
+        description: "Which cloned directory (under the cluster data root) to pull."
+        required: true
+        type: choice
+        default: code
+        options:
+          - code
+          - submitter
+          - queue
+          - aind-ephys-pipeline
+          - aind-ephys-pipeline.cody
+      reinstall:
+        description: "Run `pip install -e` on the directory after pulling (only applies to installable Python packages)."
+        required: false
+        type: boolean
+        default: true
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -30,8 +47,17 @@ jobs:
     runs-on: [self-hosted, mit, engaging, submitter]
 
     steps:
-      - name: Pull and reinstall codebase
+      - name: Pull codebase
         working-directory: /orcd/data/dandi/001/dandi-compute
         run: |
-          git -C ./code/ pull --ff-only
-          pip install -e ./code/
+          git -C "./${{ inputs.directory }}/" pull --ff-only
+
+      - name: Reinstall package
+        if: ${{ inputs.reinstall }}
+        working-directory: /orcd/data/dandi/001/dandi-compute
+        run: |
+          if [ -f "./${{ inputs.directory }}/pyproject.toml" ] || [ -f "./${{ inputs.directory }}/setup.py" ]; then
+            pip install -e "./${{ inputs.directory }}/"
+          else
+            echo "No installable Python package found in ./${{ inputs.directory }}/; skipping reinstall."
+          fi
