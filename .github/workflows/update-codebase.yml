@@ -13,7 +13,6 @@ on:
           - submitter
           - queue
           - aind-ephys-pipeline
-          - aind-ephys-pipeline.cody
       reinstall:
         description: "Run `pip install -e` on the directory after pulling (only applies to installable Python packages)."
         required: false
