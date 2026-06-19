@@ -14,6 +14,7 @@ if (( maintenance_held >= maintenance_threshold )); then
   exit 0
 fi
 
+source /etc/profile.d/modules.sh
 module load miniforge
 conda activate /orcd/data/dandi/001/environments/name-dandi+compute_env
 
