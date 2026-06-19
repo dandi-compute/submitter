@@ -52,7 +52,7 @@ jobs:
           git -C "./${{ inputs.directory }}/" fetch origin
           git -C "./${{ inputs.directory }}/" reset --hard "@{u}"
           if [ -d "./${{ inputs.directory }}/launcher" ]; then
-            chmod +x ./${{ inputs.directory }}/launcher/*
+            find ./${{ inputs.directory }}/launcher/ -maxdepth 1 -type f ! -name "crontab" -exec chmod +x {} +
           fi
 
       - name: Reinstall package
