@@ -77,7 +77,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "DANDI Compute: AIND Queue state update failed (MIT Engaging dispatch)"
           to: cody.c.baker.phd@gmail.com  # Add more with comma separation (no spaces)
-          from: Typhon CRON
+          from: DANDI Compute <dandi-compute@users.noreply.github.com>
           body: |
             The scheduled run of AIND Queue state update encountered an issue!
             Please check status at: https://github.com/dandi-compute/submitter/actions/workflows/update_state.yml

@@ -60,7 +60,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "DANDI Compute: monthly work directory cleanup failed"
           to: cody.c.baker.phd@gmail.com  # Add more with comma separation (no spaces)
-          from: Typhon CRON
+          from: DANDI Compute <dandi-compute@users.noreply.github.com>
           body: |
             The scheduled monthly cleanup of ./work/ encountered an issue.
             Please check status at: https://github.com/dandi-compute/submitter/actions/workflows/clean-workdir.yml
