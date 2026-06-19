@@ -51,6 +51,9 @@ jobs:
         run: |
           git -C "./${{ inputs.directory }}/" fetch origin
           git -C "./${{ inputs.directory }}/" reset --hard "@{u}"
+          if [ -d "./${{ inputs.directory }}/launcher" ]; then
+            chmod +x ./${{ inputs.directory }}/launcher/*
+          fi
 
       - name: Reinstall package
         if: ${{ inputs.reinstall }}
