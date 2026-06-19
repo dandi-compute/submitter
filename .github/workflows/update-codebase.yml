@@ -49,7 +49,8 @@ jobs:
       - name: Pull codebase
         working-directory: /orcd/data/dandi/001/dandi-compute
         run: |
-          git -C "./${{ inputs.directory }}/" pull --ff-only
+          git -C "./${{ inputs.directory }}/" fetch origin
+          git -C "./${{ inputs.directory }}/" reset --hard "@{u}"
 
       - name: Reinstall package
         if: ${{ inputs.reinstall }}
