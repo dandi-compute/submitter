@@ -49,7 +49,11 @@ jobs:
       - name: Pull codebase
         working-directory: /orcd/data/dandi/001/dandi-compute
         run: |
-          git -C "./${{ inputs.directory }}/" pull --ff-only
+          git -C "./${{ inputs.directory }}/" fetch origin
+          git -C "./${{ inputs.directory }}/" reset --hard "@{u}"
+          if [ -d "./${{ inputs.directory }}/launcher" ]; then
+            find ./${{ inputs.directory }}/launcher/ -maxdepth 1 -type f ! -name "crontab" -exec chmod +x {} +
+          fi
 
       - name: Reinstall package
         if: ${{ inputs.reinstall }}
