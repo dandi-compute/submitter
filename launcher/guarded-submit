@@ -8,6 +8,7 @@
 #   -n MAX_PD   Max pending jobs allowed before skipping (default: 10)
 #   -u USER     User to check (default: current user via --me)
 #   -s STATE    Slurm state(s) to count, comma-separated (default: PD)
+#   -j JITTER   Max seconds of random sleep before submitting (default: 5)
 #   -q          Quiet: suppress the "skipping" message
 #   -h          Show help
 #
@@ -22,18 +23,20 @@ MAX_PD=10
 USER_FILTER="--me"
 STATE="PD"
 QUIET=0
+JITTER=5
 
 usage() {
     sed -n '2,20p' "$0" | sed 's/^# \{0,1\}//'
     exit "${1:-2}"
 }
 
-while getopts ":n:u:s:qh" opt; do
+while getopts ":n:u:s:j:qh" opt; do
     case "$opt" in
         n) MAX_PD=$OPTARG ;;
         u) USER_FILTER="-u $OPTARG" ;;
         s) STATE=$OPTARG ;;
         q) QUIET=1 ;;
+        j) JITTER=$OPTARG ;;
         h) usage 0 ;;
         \?) echo "Unknown option: -$OPTARG" >&2; usage ;;
         :)  echo "Option -$OPTARG requires an argument" >&2; usage ;;
@@ -49,6 +52,10 @@ count=$(squeue $USER_FILTER -h -t "$STATE" -o %i | wc -l)
 if [ "$count" -ge "$MAX_PD" ]; then
     [ "$QUIET" -eq 1 ] || echo "$(date): $count jobs in state $STATE (>= $MAX_PD), skipping: $*"
     exit 0
+fi
+
+if [ "$JITTER" -gt 0 ]; then
+    sleep $((RANDOM % (JITTER + 1)))
 fi
 
 exec "$@"
