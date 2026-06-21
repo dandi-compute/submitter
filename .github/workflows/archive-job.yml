@@ -48,7 +48,7 @@ jobs:
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}
-    needs: [CheckEngaging, PrepareAIND]
+    needs: [CheckEngaging, ArchiveJob]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
