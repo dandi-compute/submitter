@@ -5,6 +5,8 @@ on:
   workflow_run:
     workflows: ["Prepare queue", "Process AIND queue", "Prepare AIND job", "Prepare AIND test job"]
     types: [completed]
+  schedule:
+    - cron: "0 5 * * *"
 
 permissions:
   contents: read
@@ -52,6 +54,11 @@ jobs:
           git -C queue add .
           git -C queue commit --message "update" || true  # || true in case of no changes
           git -C queue push
+
+      - name: Re-write crontab
+        run:
+          ssh login007
+          crontab /orcd/data/dandi/001/dandi-compute/submitter/launcher/crontab
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
