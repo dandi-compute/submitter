@@ -11,7 +11,7 @@ on:
         required: false
         default: "10"
   schedule:
-    - cron: '0 */12 * * *'
+    - cron: '0 */4 * * *'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
