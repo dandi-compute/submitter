@@ -6,7 +6,7 @@ on:
     workflows: ["Prepare queue", "Process AIND queue", "Prepare AIND job", "Prepare AIND test job"]
     types: [completed]
   schedule:
-    - cron: "0 5 * * *"  # at least once a day, even if no other workflow triggers it
+    - cron: "0 5 * * *"
 
 permissions:
   contents: read
