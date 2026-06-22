@@ -42,7 +42,6 @@ jobs:
 
   ProcessAINDQueue:
     needs: CheckEngaging
-    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     name: Process AIND Queue
     runs-on: [self-hosted, mit, engaging, submitter]
 
