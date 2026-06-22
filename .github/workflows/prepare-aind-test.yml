@@ -28,7 +28,7 @@ jobs:
     name: Pre-run Check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
 
       - name: Cancel if offline
         uses: ./.github/actions/check-runner
@@ -72,7 +72,7 @@ jobs:
     needs: [CheckEngaging, PrepareAINDTest]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
 
       - name: Check 24-hour cooldown
         id: cooldown
@@ -83,7 +83,7 @@ jobs:
 
       - name: Send email notification on failure
         if: ${{ steps.cooldown.outputs.should_notify == 'true' }}
-        uses: dawidd6/action-send-mail@v17
+        uses: dawidd6/action-send-mail@42942bc2f8fba4e611b459a018967a6a7c78c68c # v17
         with:
           server_address: smtp.gmail.com
           server_port: 465
