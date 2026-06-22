@@ -1,7 +1,7 @@
 name: Prepare queue
 
 permissions:
-  contents: write
+  contents: read
 
 on:
   workflow_dispatch:
@@ -37,7 +37,7 @@ jobs:
     needs: CheckEngaging
     name: Prepare AIND queue
     permissions:
-      contents: write
+      contents: read
     runs-on: [self-hosted, mit, engaging, submitter]
 
     steps:
