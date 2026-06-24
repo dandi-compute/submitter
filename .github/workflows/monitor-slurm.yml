@@ -10,6 +10,9 @@ concurrency:
 permissions:
   contents: read
 
+env:
+  DANDICOMPUTE_OOP_FAILSAFE_LOG: ${{ vars.DANDICOMPUTE_OOP_FAILSAFE_LOG }}
+
 jobs:
   CheckEngaging:
     name: Pre-run Check
