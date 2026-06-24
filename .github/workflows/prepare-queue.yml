@@ -19,6 +19,7 @@ concurrency:
 
 env:
   DANDI_API_KEY: ${{ secrets.DANDI_API_KEY }}
+  DANDICOMPUTE_OOP_FAILSAFE_LOG: ${{ vars.DANDICOMPUTE_OOP_FAILSAFE_LOG }}
 
 jobs:
   CheckEngaging:

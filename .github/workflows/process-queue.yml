@@ -26,6 +26,7 @@ env:
   DANDI_API_KEY: ${{ secrets.DANDI_API_KEY }}
   DANDI_DEVEL: ${{ secrets.DANDI_DEVEL }}
   KACHERY_API_KEY: ${{ secrets.KACHERY_API_KEY }}
+  DANDICOMPUTE_OOP_FAILSAFE_LOG: ${{ vars.DANDICOMPUTE_OOP_FAILSAFE_LOG }}
 
 jobs:
   CheckEngaging:
