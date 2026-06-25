@@ -10,4 +10,4 @@
 0 18 * * * flock -n /orcd/data/dandi/001/backup/flocks/backup_nonblobs.lock sbatch --output /dev/null --error=/dev/null /orcd/data/dandi/001/backup/simple-s3-backup/scripts/backup_nonblobs_deployment.sh
 0 6 * * * flock -n /orcd/data/dandi/001/backup/flocks/update_dashboard.lock sbatch --output /dev/null --error=/dev/null /orcd/data/dandi/001/backup/simple-s3-backup/scripts/update_dashboard.sh
 0 0 * * * sbatch --output /dev/null --error=/dev/null ~/cleanup_blobs_001.sh
-0 0 * * * sbatcch --output /dev/null --error=/dev/null ~/cleanup_blobs_002.sh
+0 0 * * * sbatch --output /dev/null --error=/dev/null ~/cleanup_blobs_002.sh
