@@ -9,5 +9,5 @@
 #0 19 * * 0,3 flock -n /orcd/data/dandi/001/backup/flocks/backup_zarr_batch.lock sbatch --output /dev/null --error=/dev/null /orcd/data/dandi/001/backup/simple-s3-backup/scripts/backup_zarr_batch_deployment.sh  # Zarr was disabled in May 2026
 0 18 * * * flock -n /orcd/data/dandi/001/backup/flocks/backup_nonblobs.lock sbatch --output /dev/null --error=/dev/null /orcd/data/dandi/001/backup/simple-s3-backup/scripts/backup_nonblobs_deployment.sh
 0 6 * * * flock -n /orcd/data/dandi/001/backup/flocks/update_dashboard.lock sbatch --output /dev/null --error=/dev/null /orcd/data/dandi/001/backup/simple-s3-backup/scripts/update_dashboard.sh
-0 0 * * * sbatch --output /dev/null --error=/dev/null ~/cleanup_blobs_001.sh
-0 0 * * * sbatch --output /dev/null --error=/dev/null ~/cleanup_blobs_002.sh
+0 0 * * * sbatch --output /dev/null --error=/dev/null /home/cb239/cleanup_blobs_001.sh
+0 0 * * * sbatch --output /dev/null --error=/dev/null /home/cb239/cleanup_blobs_002.sh
