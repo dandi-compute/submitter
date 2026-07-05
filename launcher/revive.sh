@@ -10,7 +10,7 @@ set -uo pipefail
 
 JOBNAME="dandi-submitter"
 INTERVAL_MIN=60
-SELF="/orcd/data/dandi/001/dandi-compute/submitter/launcher/submit-loop.sh"
+SELF="/orcd/data/dandi/001/dandi-compute/submitter/launcher/revive.sh"
 
 OTHERS=$(squeue --noheader --name="$JOBNAME" --user="$USER" \
          --states=PENDING,RUNNING --format="%A" \
