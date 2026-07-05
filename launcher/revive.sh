@@ -2,7 +2,6 @@
 #SBATCH --job-name=revive
 #SBATCH --output=/orcd/data/dandi/001/dandi-compute/tmp/revive-logs/%x-%j.out
 #SBATCH --time=00:10:00
-#SBATCH --qos=shortrun
 #SBATCH --partition=mit_preemptable
 #SBATCH --mem=100MB
 #SBATCH --cpus-per-task=1
