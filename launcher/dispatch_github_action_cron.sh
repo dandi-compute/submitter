@@ -27,7 +27,7 @@ log "=== dispatch run starting (pid $$) ==="
 # --- single instance ---------------------------------------------------------
 # Stops overlapping runs from stacking up if a previous run is wedged. A wedged
 # run keeps the lock, so `ps`/the log shows exactly one stuck pid to inspect.
-LOCK_FILE="/orcd/data/dandi/001/dandi-compute/tmp/dispatch_github_action_cron.lock"
+LOCK_FILE="/orcd/data/dandi/001/dandi-compute/flocks/dispatch_github_action_cron.lock"
 exec 9>"$LOCK_FILE"
 if ! flock -n 9; then
   log "Another dispatch run holds $LOCK_FILE; exiting."

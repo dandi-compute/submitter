@@ -24,7 +24,6 @@ jobs:
       - name: Cancel if offline
         uses: ./.github/actions/check-runner
         with:
-          org: CodyCBakerPhD/self-hosted-crons
           labels: mit,engaging,monitor
           token: ${{ secrets._GITHUB_API_KEY }}
 
@@ -39,7 +38,7 @@ jobs:
         run: |
           while true; do
             echo "Timestamp: $(date)"
-            squeue --format="%.10i %15P %40j %10u %.2t %.10M %.6D %.2C %30R" --me
+            squeue --format="%.10i %15P %40j %10u %.2t %.10M %.6D %.2C %.10m %30R" --me
             sleep 120
           done
 
