@@ -54,6 +54,7 @@ jobs:
           git -C ./queue clean -fd
 
           dandicompute queue prepare --queue ./queue/ --pipeline ./aind-ephys-pipeline/ --limit ${{ inputs.limit || 10 }}
+          dandicompute queue prepare --queue ./queue/ --pipeline lfp --limit 10
 
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
