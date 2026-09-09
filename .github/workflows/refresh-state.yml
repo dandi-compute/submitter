@@ -43,19 +43,7 @@ jobs:
     steps:
       - name: Update queue state
         working-directory: /orcd/data/dandi/001/dandi-compute
-        run: |
-          git -C ./queue fetch origin
-          git -C ./queue reset --hard origin/main
-          git -C ./queue clean -fd
-
-          dandicompute queue refresh --queue ./queue/
-
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-          git -C queue add .
-          git -C queue commit --message "update" || true  # || true in case of no changes
-          git -C queue push
+        run: dandicompute queue refresh
 
       - name: Re-write crontab
         run:
